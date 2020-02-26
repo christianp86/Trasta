@@ -1,6 +1,7 @@
 {
         "name": "wasteStatsApp",
         "version": "0.0.1",
+        "description": "Best-practice starting point for building a freestyle app",
         "engines": {
                 "node": "12.x.x"
         },
@@ -14,7 +15,9 @@
                 "build:ui": "ui5 build --clean-dest --dest approuter/webapp "
         },
         "dependencies": {
-                "@openui5/sap.m": "^1.73.1",
+                "@openui5/sap.m": "^1.74.1",
+                "@openui5/sap.ui.core": "^1.74.1",
+                "@openui5/sap.ui.layout": "^1.74.1",
                 "shx": "^0.3.2",
                 "ui5-middleware-livereload": "^0.1.6"
         },

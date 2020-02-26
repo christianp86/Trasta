@@ -15,7 +15,8 @@
         },
         "dependencies": {
                 "@openui5/sap.m": "^1.73.1",
-                "shx": "^0.3.2"
+                "shx": "^0.3.2",
+                "ui5-middleware-livereload": "^0.1.6"
         },
         "devDependencies": {
                 "@ui5/cli": "^1.12.1",

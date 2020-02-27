@@ -53,6 +53,14 @@
 				"settings": {
 					"bundleName": "com.fidschenberger.wasteStatsApp.i18n.i18n"
 				}
+			},
+			"waste_types": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/wasteTypes.json"
+			},
+			"waste_items": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/wasteItems.json"
 			}
 		},
 		"resources": {

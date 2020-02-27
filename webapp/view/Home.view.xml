@@ -1,8 +1,25 @@
-<mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc">
 	<Page id="start" title="{i18n>title}">
 		<content>
-			<Label text="{i18n>inputWasteWeight}" labelFor="inputWasteWeight" />
-			<Input id="inputWasteWeight" type="Number" class="sapUiSmallMarginBottom" placeholder="{i18n>inputWasteWeightPlaceholder}" />
+			<Panel>
+				<FlexBox height="100px" renderType="Div">
+					<items>
+						<!-- <Label text="{i18n>inputWasteWeight}" labelFor="inputWasteWeight" class="sapUiSmallMarginEnd" /> -->
+						<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" />
+						<Select 
+							selectedKey="{waste_items>/newWasteItem/type}"
+							forceSelection="true" 
+							items="{
+								path: 'waste_types>/wasteTypes',
+								sorter: { path: 'waste_types>text' }
+							}" 
+							class="sapUiSmallMarginEnd">
+							<core:Item key="{waste_types>key}" text="{waste_types>text}" />
+						</Select>
+						<Button text="{i18n>addWasteButton}" press="addWaste" />
+					</items>
+				</FlexBox>
+			</Panel>
 		</content>
 	</Page>
 </mvc:View>

@@ -1,0 +1,12 @@
+{
+    "wasteTypes": [
+        {
+            "key": "ORGANIC",
+            "text": "Organic"
+        },
+        {
+            "key": "PAPER",
+            "text": "Paper"
+        }
+    ]
+}

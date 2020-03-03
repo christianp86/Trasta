@@ -9,8 +9,6 @@ sap.ui.define([
     onAfterRendering: function () {
       var ctx = document.getElementById("barChart");
 
-      var aChartData = this._getChartData();
-
       var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -24,7 +22,8 @@ sap.ui.define([
               'rgba(255, 206, 86, 0.2)',
               'rgba(75, 192, 192, 0.2)',
               'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(0, 255, 0, 0.2)'
             ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
@@ -32,7 +31,8 @@ sap.ui.define([
               'rgba(255, 206, 86, 1)',
               'rgba(75, 192, 192, 1)',
               'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
+              'rgba(255, 159, 64, 1)',
+              'rgba(0, 255, 0, 1)'
             ],
             borderWidth: 1
           }]
@@ -100,7 +100,7 @@ sap.ui.define([
         return a.type.localeCompare(b.type);
       });
 
-      return aTotalWaste.aCumulatedWaste.map(function (oTotalItem) { return oTotalItem.totalWeight});
+      return aTotalWaste.aCumulatedWaste.map(function (oTotalItem) { return oTotalItem.totalWeight });
     }
 
   });

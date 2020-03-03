@@ -7,13 +7,43 @@
     "wasteItems": [
         {
             "type": "ORGANIC",
-            "weight": 1740,
-            "date": "1582212006000"
+            "weight": 360,
+            "date": "1581935941000"
         },
         {
             "type": "PAPER",
-            "weight": 1341,
-            "date": "1582212006000"
+            "weight": 2180,
+            "date": "1581935941000"
+        },
+        {
+            "type": "OTHER",
+            "weight": 340,
+            "date": "1581935941000"
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 1540,
+            "date": "1582022341000"
+        },
+        {
+            "type": "PLASTIC",
+            "weight": 1170,
+            "date": "1582367941000"
+        },
+        {
+            "type": "ALUMINUM",
+            "weight": 340,
+            "date": "1582367941000"
+        },
+        {
+            "type": "GLAS",
+            "weight": 1540,
+            "date": "1582367941000"
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 1440,
+            "date": "1582367941000"
         }
     ]
 }

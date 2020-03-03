@@ -1,4 +1,6 @@
-<mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" 
+	xmlns="sap.m" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" 
+	xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" >
 	<f:DynamicPage id="dynamicPageId" preserveHeaderStateOnScroll="true" headerExpanded="true">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -54,32 +56,30 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<layout:VerticalLayout class="sapUiContentPadding" width="100%">
 
-				<core:HTML content="&lt;canvas id=&quot;barChart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;"></core:HTML>
-				<Table id="idWasteItemsTable" inset="false" items="{
-						path: 'waste_items>/wasteItems',
-						sorter: {
-							path: 'date'
-						}
-					}">
-					<columns>
-						<Column>
-							<Text text="Type" />
-						</Column>
-						<Column>
-							<Text text="Weight" />
-						</Column>
-						<Column>
-							<Text text="Date added" />
-						</Column>
-					</columns>
-					<items>
-						<ColumnListItem>
-							<cells>
-								<Text text="{waste_items>type}" />
-								<Text text="{waste_items>weight}" />
-								<Text text="{
+			<Table id="idWasteItemsTable" inset="false" items="{
+				path: 'waste_items>/wasteItems',
+				sorter: {
+					path: 'date'
+				}
+			}">
+				<columns>
+					<Column>
+						<Text text="Type" />
+					</Column>
+					<Column>
+						<Text text="Weight" />
+					</Column>
+					<Column>
+						<Text text="Date added" />
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{waste_items>type}" />
+							<Text text="{waste_items>weight}" />
+							<Text text="{
 									path: 'waste_items>date',
 									type: 'sap.ui.model.type.DateTime',
 									formatOptions: { 
@@ -87,11 +87,20 @@
 										source: {pattern: 'timestamp'}
 									}
 							}" />
-							</cells>
-						</ColumnListItem>
-					</items>
-				</Table>
-			</layout:VerticalLayout>
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
 		</f:content>
 	</f:DynamicPage>
-</mvc:View>
+</mvc:View> <!-- <Page id="start" title="{i18n>title}">
+		<content>
+			<Panel>
+				<FlexBox height="100px" renderType="Div">
+					<items>
+<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" /><Select selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
+								path: 'waste_types>/wasteTypes',
+								sorter: { path: 'waste_types>text' }
+							}" class="sapUiSmallMarginEnd">
+	<core:Item key="{waste_types>key}" text="{waste_types>text}" />
+</Select><Button text="{i18n>addWasteButton}" press="addWaste" /></items></FlexBox></Panel></content></Page>-->

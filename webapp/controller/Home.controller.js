@@ -1,7 +1,17 @@
+sap.ui.loader.config({
+  shim: {
+    'com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min': {
+      amd: true,
+      exports: 'Chart'
+    }
+  }
+});
+
 sap.ui.define([
   "./BaseController",
-  "sap/base/Log"
-], function (Controller, Log) {
+  "sap/base/Log",
+  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min"
+], function (Controller, Log, Chart) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
@@ -9,6 +19,7 @@ sap.ui.define([
     onAfterRendering: function () {
       var ctx = document.getElementById("barChart");
 
+      // eslint-disable-next-line no-unused-vars
       var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -47,6 +58,7 @@ sap.ui.define([
           }
         }
       });
+
     },
 
     addWaste: function () {

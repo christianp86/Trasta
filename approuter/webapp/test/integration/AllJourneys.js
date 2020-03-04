@@ -1,1 +1,0 @@
-sap.ui.define(["sap/ui/test/Opa5","com/fidschenberger/wasteStatsApp/test/integration/arrangements/Startup","com/fidschenberger/wasteStatsApp/test/integration/BasicJourney"],function(e,t){"use strict";e.extendConfig({arrangements:new t,pollingInterval:1})});

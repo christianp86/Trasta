@@ -12,6 +12,8 @@
                 "karma-ci": "karma start karma-ci.conf.js",
                 "karma": "rimraf coverage && npm run karma-ci",
                 "lint": "eslint webapp",
+                "build": "ui5 build -a --clean-dest",
+                "build-self-contained": "ui5 build self-contained -a --clean-dest",
                 "build:ui": "ui5 build --clean-dest --dest approuter/webapp "
         },
         "dependencies": {
@@ -19,6 +21,7 @@
                 "@openui5/sap.ui.core": "^1.74.1",
                 "@openui5/sap.ui.layout": "^1.74.1",
                 "chart.js": "^2.9.3",
+                "localforage": "^1.7.3",
                 "shx": "^0.3.2",
                 "ui5-middleware-livereload": "^0.1.6"
         },

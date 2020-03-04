@@ -1,1 +1,0 @@
-sap.ui.define(["sap/ui/test/Opa5"],function(t){"use strict";return t.extend("com.fidschenberger.wasteStatsApp.test.integration.arrangements.Startup",{iStartMyApp:function(){this.iStartMyUIComponent({componentConfig:{name:"com.fidschenberger.wasteStatsApp",async:true,manifest:true}})}})});

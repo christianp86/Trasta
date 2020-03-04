@@ -45,13 +45,62 @@ sap.ui.define([
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
 
-        clone: function (obj) {
+        /**
+		 * Clones an object
+		 * @private
+         * @param {obj} obj Object to be cloned
+		 * @returns {Object} Cloned Object
+		 */
+        _clone: function (obj) {
             if (null == obj || "object" != typeof obj) return obj;
             var copy = obj.constructor();
             for (var attr in obj) {
                 if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
             }
             return copy;
+        },
+
+        _saveModelInDB: function () {
+
+            var aWaste = this._getWasteItemsFromModel();
+
+            localforage.setItem('waste', aWaste)
+                .then((value) => {
+                    this._setWasteItemsInModel(value);
+                }).catch((err) => {
+                    Log.error(err);
+                });
+        },
+
+        _loadDataFromJSON: function () {
+            const oModel = this.getModel("waste_items");
+
+            oModel.loadData('../model/wasteItems.json')
+                .then(() => {
+                    this._saveModelInDB();
+                }).catch((err) => {
+                    Log.error(err);
+                });
+        },
+
+        /**
+		 * Gets waste items as array from model
+		 * @private
+		 * @returns {Array} Waste Items Entries of model
+		 */
+        _getWasteItemsFromModel: function () {
+            var oModel = this.getModel("waste_items");
+            return oModel.getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
+        },
+
+        /**
+		 * Gets waste items as array from model
+		 * @private
+         * @param {Array} aWasteItems Waste Items Entries
+		 */
+        _setWasteItemsInModel: function (aWasteItems) {
+            const oModel = this.getModel("waste_items");
+            oModel.setProperty('/wasteItems', aWasteItems);
         }
     });
 

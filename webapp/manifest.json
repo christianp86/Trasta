@@ -61,7 +61,7 @@
 			},
 			"waste_items": {
 				"type": "sap.ui.model.json.JSONModel",
-				"uri": "model/wasteItems.json"
+				"uri": "model/wasteItemsEmpty.json"
 			}
 		},
 		"resources": {

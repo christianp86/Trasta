@@ -10,17 +10,20 @@ sap.ui.loader.config({
 sap.ui.define([
   "./BaseController",
   "sap/base/Log",
-  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min"
-], function (Controller, Log, Chart) {
+  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min",
+  "com/fidschenberger/wasteStatsApp/libs/localforage.min"
+], function (Controller, Log, Chart, localForage) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
 
+    aTotalWasteData: new Array(),
+
     onAfterRendering: function () {
       var ctx = document.getElementById("barChart");
+      this.aTotalWasteData = this._calculateTotals();
 
-      // eslint-disable-next-line no-unused-vars
-      var myChart = new Chart(ctx, {
+      this.myChart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: this._getChartLabels(),
@@ -62,13 +65,14 @@ sap.ui.define([
     },
 
     addWaste: function () {
-      var oModel = this.getView().getModel("waste_items");
-      var aWaste = oModel.getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
+      const oModel = this.getModel("waste_items");
+      var aWaste = this._getWasteItemsFromModel();
 
       var oNewItem = oModel.getProperty("/newWasteItem");
-      oNewItem.date = Date.now();
+      oNewItem.weight = Number(oNewItem.weight);
+      oNewItem.date = String(Date.now());
 
-      var oClonedItem = this.clone(oNewItem);
+      var oClonedItem = this._clone(oNewItem);
       aWaste.push(oClonedItem);
 
       for (var propt in oNewItem) {
@@ -77,6 +81,9 @@ sap.ui.define([
 
       oModel.setProperty("/newWasteItem", oNewItem);
       oModel.setProperty("/wasteItems", aWaste);
+
+      this._saveModelInDB();
+      this._updateChartWithNewWaste(oClonedItem);
     },
 
     _getChartLabels: function () {
@@ -88,12 +95,12 @@ sap.ui.define([
       return aWasteTypes;
     },
 
-    _getChartData: function () {
-      var oModel = this.getModel("waste_items");
-      var aWaste = oModel.getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
 
-      var aTotalWaste = aWaste.reduce(function (result, oWasteItem) {
-        var sType = oWasteItem.type;
+    _calculateTotals: function () {
+      const aWaste = this._getWasteItemsFromModel();
+
+      const aTotalWaste = aWaste.reduce(function (result, oWasteItem) {
+        const sType = oWasteItem.type;
         if (!(sType in result)) {
           result.aCumulatedWaste.push(
             result[sType] = {
@@ -112,7 +119,22 @@ sap.ui.define([
         return a.type.localeCompare(b.type);
       });
 
-      return aTotalWaste.aCumulatedWaste.map(function (oTotalItem) { return oTotalItem.totalWeight });
+      return aTotalWaste.aCumulatedWaste;
+
+    },
+
+    _getChartData: function () {
+      return this.aTotalWasteData.map(function (oTotalItem) { return oTotalItem.totalWeight });
+    },
+
+    _updateChartWithNewWaste: function (oWasteItem) {
+      const isWasteType = (element) => element.type === oWasteItem.type;
+      const index = this.aTotalWasteData.findIndex(isWasteType);
+      let value = this.myChart.data.datasets[0].data[index];
+      value += oWasteItem.weight;
+
+      this.myChart.data.datasets[0].data[index] = value;
+      this.myChart.update();
     }
 
   });

@@ -17,19 +17,17 @@ sap.ui.define([
 	return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
 
 		onInit: function () {
-
-			var oModel = this.getView().getModel("waste_items");
-			var aWaste = oModel.getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
-
-			localforage.setItem('waste', aWaste).then(function (value) {
-				// Do other things once the value has been saved.
-				Log.info("DB is ready with values: ", value);
-			}).catch(function (err) {
-				// This code runs if there were any errors
-				console.log(err);
-			});
-
-
+			localforage.getItem('waste')
+				.then((value) => {
+					if (value !== null) {
+						this._setWasteItemsInModel(value);
+					} else {
+						this._loadDataFromJSON();
+					}
+				}).catch((err) => {
+					Log.error(err);
+				});
 		}
+
 	});
 });

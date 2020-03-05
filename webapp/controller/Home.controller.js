@@ -10,9 +10,8 @@ sap.ui.loader.config({
 sap.ui.define([
   "./BaseController",
   "sap/base/Log",
-  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min",
-  "com/fidschenberger/wasteStatsApp/libs/localforage.min"
-], function (Controller, Log, Chart, localForage) {
+  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min"
+], function (Controller, Log, Chart) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {

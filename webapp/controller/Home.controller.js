@@ -68,6 +68,12 @@ sap.ui.define([
       var aWaste = this._getWasteItemsFromModel();
 
       var oNewItem = oModel.getProperty("/newWasteItem");
+
+      if (oNewItem.type === null || oNewItem.type === "") {
+        var oSelect = this.getView().byId("selectWasteType");
+        oNewItem.type = oSelect.getSelectedKey();
+      }
+
       oNewItem.weight = Number(oNewItem.weight);
       oNewItem.date = String(Date.now());
 

@@ -39,7 +39,7 @@
 							<content>
 								<layout:HorizontalLayout class="sapUiContentPadding">
 									<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" />
-									<Select selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
+									<Select id="selectWasteType" selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
 											path: 'waste_types>/wasteTypes',
 											sorter: { path: 'text' }
 										}" class="sapUiSmallMarginEnd">

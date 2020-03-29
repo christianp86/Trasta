@@ -1,0 +1,5 @@
+{
+    "config": {
+        "enable-auth0": "false"
+    }
+}

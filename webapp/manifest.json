@@ -62,6 +62,13 @@
 			"waste_items": {
 				"type": "sap.ui.model.json.JSONModel",
 				"uri": "model/wasteItemsEmpty.json"
+			},
+			"waste_statistics": {
+				"type": "sap.ui.model.json.JSONModel"
+			},
+			"configuration": {
+				"type": "sap.ui.model.json.JSONModel",
+				"uri": "model/config.json"
 			}
 		},
 		"resources": {

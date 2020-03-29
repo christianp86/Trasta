@@ -17,8 +17,18 @@ sap.ui.define([
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
 
     aTotalWasteData: new Array(),
+    aBackgroundColor: new Array([
+      'rgba(255, 99, 132, 0.2)',
+      'rgba(54, 162, 235, 0.2)',
+      'rgba(255, 206, 86, 0.2)',
+      'rgba(75, 192, 192, 0.2)',
+      'rgba(153, 102, 255, 0.2)',
+      'rgba(255, 159, 64, 0.2)',
+      'rgba(0, 255, 0, 0.2)'
+    ]),
 
     onAfterRendering: function () {
+      this._calculateStatisticalValues();
       var ctx = document.getElementById("barChart");
       this.aTotalWasteData = this._calculateTotals();
 
@@ -36,8 +46,7 @@ sap.ui.define([
               'rgba(75, 192, 192, 0.2)',
               'rgba(153, 102, 255, 0.2)',
               'rgba(255, 159, 64, 0.2)',
-              'rgba(0, 255, 0, 0.2)'
-            ],
+              'rgba(0, 255, 0, 0.2)'],
             borderColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
@@ -100,7 +109,6 @@ sap.ui.define([
       return aWasteTypes;
     },
 
-
     _calculateTotals: function () {
       const aWaste = this._getWasteItemsFromModel();
 
@@ -140,7 +148,17 @@ sap.ui.define([
 
       this.myChart.data.datasets[0].data[index] = value;
       this.myChart.update();
-    }
+    },
+
+    _calculateStatisticalValues: async function () {
+      const oModel = this.getModel("waste_statistics");
+      const aWaste = this._getWasteItemsFromModel();
+
+      const iTotal = aWaste.reduce(function(result, oWasteItem) {
+        return result.hasOwnProperty("weight") ? result.weight += oWasteItem.weight : result += oWasteItem.weight
+      }) / 1000;
+      oModel.setProperty("/totalWaste", iTotal);
+    },
 
   });
 });

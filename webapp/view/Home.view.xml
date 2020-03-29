@@ -16,8 +16,8 @@
 				</f:snappedTitleOnMobile>
 				<f:content>
 					<OverflowToolbar>
-						<GenericTag text="SR" status="Error" press="onGenericTagPress" design="StatusIconHidden">
-							<ObjectNumber number="2" unit="M" emphasized="false" state="Error" />
+						<GenericTag text="{i18n>totalWaste}" status="Warning" press="onGenericTagPress" design="StatusIconHidden" class="sapUiSmallMarginBottom">
+							<ObjectNumber number="{waste_statistics>/totalWaste}" numberUnit="KG" emphasized="false" state="Warning" />
 						</GenericTag>
 					</OverflowToolbar>
 				</f:content>

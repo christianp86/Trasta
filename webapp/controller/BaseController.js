@@ -94,13 +94,18 @@ sap.ui.define([
         },
 
         /**
-		 * Gets waste items as array from model
+		 * Sets waste items as array from model
 		 * @private
          * @param {Array} aWasteItems Waste Items Entries
 		 */
         _setWasteItemsInModel: function (aWasteItems) {
             const oModel = this.getModel("waste_items");
             oModel.setProperty('/wasteItems', aWasteItems);
+        },
+
+        _getConfigValue: function (sParameter) {
+            const oModel = this.getModel("configuration").getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
+            return oModel.getProperty(sParameter);
         }
     });
 

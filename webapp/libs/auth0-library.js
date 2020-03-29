@@ -32,8 +32,6 @@ sap.ui.define([
 
 		configureClient: async function () {
 			const reponse = await this.fetchAuthConfig();
-			/* console.log("SO ein mist!");
-			const config = await response.json(); */
 
 			auth0 = await createAuth0Client({
 				domain: config.domain,

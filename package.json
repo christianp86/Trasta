@@ -13,6 +13,7 @@
                 "karma": "rimraf coverage && npm run karma-ci",
                 "lint": "eslint webapp",
                 "build": "ui5 build -a --clean-dest",
+                "npm build": "npm run build",
                 "build-self-contained": "ui5 build self-contained -a --clean-dest",
                 "build:ui": "ui5 build --clean-dest --dest approuter/webapp "
         },

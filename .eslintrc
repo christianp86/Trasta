@@ -51,5 +51,8 @@
 		"no-multi-spaces": 0,
 		"no-shadow": 0,
 		"no-irregular-whitespace": 0
+	},
+	"parserOptions": {
+		"ecmaVersion": 10
 	}
 }

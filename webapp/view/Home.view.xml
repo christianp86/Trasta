@@ -1,4 +1,4 @@
-<mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:table="sap.ui.table" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
+<mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
 	<f:DynamicPage id="dynamicPageId" preserveHeaderStateOnScroll="true" headerExpanded="true">
 		<f:title>
 			<f:DynamicPageTitle>
@@ -6,28 +6,28 @@
 					<Title text="{i18n>title}" />
 				</f:heading>
 				<f:expandedContent>
-					<Label text="This is a subheading" />
+					<Label text="{i18n>appDescription}" />
 				</f:expandedContent>
 				<f:snappedContent>
-					<Label text="This is a subheading" />
+					<Label text="{i18n>appDescription}" />
 				</f:snappedContent>
 				<f:snappedTitleOnMobile>
 					<Title text="{i18n>title}" />
 				</f:snappedTitleOnMobile>
 				<f:content>
 					<OverflowToolbar>
-						<GenericTag text="{i18n>totalWaste}" status="Warning" press="onGenericTagPress" design="StatusIconHidden" class="sapUiSmallMarginBottom">
+						<GenericTag text="{i18n>totalWaste}" status="Warning" press="onGenericTagPress" design="StatusIconHidden">
 							<ObjectNumber number="{waste_statistics>/totalWaste}" numberUnit="KG" emphasized="false" state="Warning" />
 						</GenericTag>
 					</OverflowToolbar>
 				</f:content>
-				<f:actions>
+				<!-- <f:actions>
 					<ToolbarSpacer />
 					<Button text="Edit" type="Emphasized" />
 					<Button text="Delete" type="Transparent" />
 					<Button text="Copy" type="Transparent" />
 					<Button icon="sap-icon://action" type="Transparent" />
-				</f:actions>
+				</f:actions> -->
 			</f:DynamicPageTitle>
 		</f:title>
 		<!-- DynamicPage Header -->

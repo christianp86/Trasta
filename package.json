@@ -19,7 +19,7 @@
         },
         "dependencies": {
                 "@auth0/auth0-spa-js": "^1.6.4",
-                "@openui5/sap.m": "^1.74.1",
+                "@openui5/sap.m": "^1.76.1",
                 "@openui5/sap.ui.core": "^1.74.1",
                 "@openui5/sap.ui.layout": "^1.74.1",
                 "chart.js": "^2.9.3",
@@ -28,11 +28,11 @@
                 "ui5-middleware-livereload": "^0.1.6"
         },
         "devDependencies": {
-                "@ui5/cli": "^1.12.1",
+                "@ui5/cli": "^2.0.2",
+                "eslint": "^6.7.2",
                 "karma": "^4.4.1",
                 "karma-chrome-launcher": "^3.1.0",
                 "karma-coverage": "^2.0.1",
-                "karma-ui5": "^1.1.0",
-                "eslint": "^6.7.2"
+                "karma-ui5": "^1.1.0"
         }
 }

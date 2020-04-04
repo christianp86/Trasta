@@ -101,11 +101,16 @@ sap.ui.define([
     },
 
     _getChartLabels: function () {
-      var oModel = this.getModel("waste_types");
-      var oBundle = this.getResourceBundle();
-      var aWasteTypes = oModel.getProperty("/wasteTypes").map(function (oWasteType) { return oBundle.getText(oWasteType.key); });
+      const oModel = this.getModel("waste_types");
+      const oBundle = this.getResourceBundle();
+      const oData = oModel.getProperty("/wasteTypes").sort((a, b) => {
+        return a.key.localeCompare(b.key);
+      });
 
-      aWasteTypes.sort();
+      const aWasteTypes = oData.map((oWasteType) => {
+        return oBundle.getText(oWasteType.key);
+      });
+
       return aWasteTypes;
     },
 
@@ -154,7 +159,7 @@ sap.ui.define([
       const oModel = this.getModel("waste_statistics");
       const aWaste = this._getWasteItemsFromModel();
 
-      const iTotal = aWaste.reduce(function(result, oWasteItem) {
+      const iTotal = aWaste.reduce(function (result, oWasteItem) {
         return result.hasOwnProperty("weight") ? result.weight += oWasteItem.weight : result += oWasteItem.weight
       }) / 1000;
       oModel.setProperty("/totalWaste", iTotal);

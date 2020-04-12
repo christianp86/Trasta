@@ -33,7 +33,7 @@ sap.ui.define([
 		},
 
 		initAuth0: async function () {
-			if (this._getConfigValue("enable-auth0") === false)
+			if (this._getConfigValue("enable-auth0") === "false")
 				return;
 
 			const auth0 = new Auth0();

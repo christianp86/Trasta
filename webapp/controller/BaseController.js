@@ -45,6 +45,10 @@ sap.ui.define([
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
 
+        geti18nValue: function (sKey) {
+            return this.getResourceBundle().getText(sKey);
+        },
+
         /**
 		 * Clones an object
 		 * @private
@@ -104,8 +108,9 @@ sap.ui.define([
         },
 
         _getConfigValue: function (sParameter) {
-            const oModel = this.getModel("configuration").getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
-            return oModel.getProperty(sParameter);
+            const oModel = this.getModel("configuration");
+            //var oProp = oModel.getProperty("/config").map(function (oWaste) { return Object.assign({}, oWaste); });
+            return oModel.getProperty("/config/" + sParameter);
         }
     });
 

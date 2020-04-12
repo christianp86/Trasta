@@ -165,5 +165,9 @@ sap.ui.define([
       oModel.setProperty("/totalWaste", iTotal);
     },
 
+    _geti18nValue: function (sKey) {
+      return this.geti18nValue(sKey);
+  },
+
   });
 });

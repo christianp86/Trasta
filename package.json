@@ -19,9 +19,6 @@
         },
         "dependencies": {
                 "@auth0/auth0-spa-js": "^1.6.4",
-                "@openui5/sap.m": "^1.76.1",
-                "@openui5/sap.ui.core": "^1.74.1",
-                "@openui5/sap.ui.layout": "^1.74.1",
                 "chart.js": "^2.9.3",
                 "localforage": "^1.7.3",
                 "shx": "^0.3.2",

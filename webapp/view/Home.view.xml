@@ -37,15 +37,15 @@
 					<items>
 						<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
 							<content>
-								<layout:HorizontalLayout class="sapUiContentPadding">
+								<layout:HorizontalLayout allowWrapping="true" class="sapUiContentPadding">
 									<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" />
 									<Select id="selectWasteType" selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
 											path: 'waste_types>/wasteTypes',
-											sorter: { path: 'text' }
+											sorter: { path: 'key' }
 										}" class="sapUiSmallMarginEnd">
-										<core:Item key="{waste_types>key}" text="{waste_types>text}" />
+										<core:Item key="{waste_types>key}" text="{path: 'waste_types>key', formatter: '._geti18nValue'}" />
 									</Select>
-									<Button text="{i18n>addWasteButton}" press="addWaste" />
+									<Button text="{i18n>addWasteButton}" press=".addWaste" />
 								</layout:HorizontalLayout>
 							</content>
 						</Panel>
@@ -77,7 +77,7 @@
 					<items>
 						<ColumnListItem>
 							<cells>
-								<Text text="{waste_items>type}" />
+								<Text text="{ path: 'waste_items>type', formatter: '._geti18nValue' }" />
 								<Text text="{waste_items>weight}" />
 								<Text text="{
 									path: 'waste_items>date',

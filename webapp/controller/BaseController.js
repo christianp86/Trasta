@@ -1,11 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/UIComponent",
-    "sap/m/library"
-], function (Controller, UIComponent, mobileLibrary) {
+    "sap/ui/core/UIComponent"
+], function (Controller, UIComponent) {
     "use strict";
 
-    return Controller.extend("com.hse24.sem.hse24-sem-apps.controller.BaseController", {
+    return Controller.extend("com.fidschenberger.wasteStatsApp.controller.BaseController", {
 		/**
 		 * Convenience method for accessing the router.
 		 * @public

@@ -10,8 +10,9 @@ sap.ui.loader.config({
 sap.ui.define([
   "./BaseController",
   "sap/base/Log",
-  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min"
-], function (Controller, Log, Chart) {
+  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min",
+  "com/fidschenberger/wasteStatsApp/libs/waste-stats-calc"
+], function (Controller, Log, Chart, Wastecalc) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
@@ -27,10 +28,15 @@ sap.ui.define([
       'rgba(0, 255, 0, 0.2)'
     ]),
 
+    onInit: function() {
+      Wastecalc = new Wastecalc();
+    },
+
+
     onAfterRendering: function () {
-      this._calculateStatisticalValues();
+      this._getStatisticalValues();
       var ctx = document.getElementById("barChart");
-      this.aTotalWasteData = this._calculateTotals();
+      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
 
       this.myChart = new Chart(ctx, {
         type: 'bar',
@@ -114,33 +120,6 @@ sap.ui.define([
       return aWasteTypes;
     },
 
-    _calculateTotals: function () {
-      const aWaste = this._getWasteItemsFromModel();
-
-      const aTotalWaste = aWaste.reduce(function (result, oWasteItem) {
-        const sType = oWasteItem.type;
-        if (!(sType in result)) {
-          result.aCumulatedWaste.push(
-            result[sType] = {
-              type: sType,
-              totalWeight: oWasteItem.weight
-            }
-          );
-        } else {
-          result[sType].totalWeight += oWasteItem.weight;
-        }
-
-        return result;
-      }, { aCumulatedWaste: [] });
-
-      aTotalWaste.aCumulatedWaste.sort(function (a, b) {
-        return a.type.localeCompare(b.type);
-      });
-
-      return aTotalWaste.aCumulatedWaste;
-
-    },
-
     _getChartData: function () {
       return this.aTotalWasteData.map(function (oTotalItem) { return oTotalItem.totalWeight });
     },
@@ -155,14 +134,9 @@ sap.ui.define([
       this.myChart.update();
     },
 
-    _calculateStatisticalValues: async function () {
+    _getStatisticalValues: async function () {
       const oModel = this.getModel("waste_statistics");
-      const aWaste = this._getWasteItemsFromModel();
-
-      const iTotal = aWaste.reduce(function (result, oWasteItem) {
-        return result.hasOwnProperty("weight") ? result.weight += oWasteItem.weight : result += oWasteItem.weight
-      }) / 1000;
-      oModel.setProperty("/totalWaste", iTotal);
+      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalWaste(this._getWasteItemsFromModel()));
     },
 
     _geti18nValue: function (sKey) {

@@ -1,5 +1,5 @@
 {
-        "name": "wasteStatsApp",
+        "name": "waste_stats_app",
         "version": "0.0.1",
         "description": "Best-practice starting point for building a freestyle app",
         "engines": {

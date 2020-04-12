@@ -37,8 +37,8 @@
 					<items>
 						<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
 							<content>
-								<layout:HorizontalLayout allowWrapping="true" class="sapUiContentPadding">
-									<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" />
+								<layout:HorizontalLayout allowWrapping="true" class="sapUiResponsiveContentPadding">
+									<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" width="16em"/>
 									<Select id="selectWasteType" selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
 											path: 'waste_types>/wasteTypes',
 											sorter: { path: 'key' }
@@ -54,7 +54,7 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<layout:VerticalLayout class="sapUiContentPadding" width="100%">
+			<layout:VerticalLayout class="sapUiResponsiveContentPadding" width="100%">
 
 				<core:HTML content="&lt;canvas id=&quot;barChart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;"></core:HTML>
 				<Table id="idWasteItemsTable" inset="false" items="{

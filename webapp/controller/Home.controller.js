@@ -15,23 +15,22 @@ sap.ui.define([
 ], function (Controller, Log, Chart, Wastecalc) {
   "use strict";
 
-  return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
+  return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
 
-    aTotalWasteData: new Array(),
-    aBackgroundColor: new Array([
-      'rgba(255, 99, 132, 0.2)',
-      'rgba(54, 162, 235, 0.2)',
-      'rgba(255, 206, 86, 0.2)',
-      'rgba(75, 192, 192, 0.2)',
-      'rgba(153, 102, 255, 0.2)',
-      'rgba(255, 159, 64, 0.2)',
-      'rgba(0, 255, 0, 0.2)'
-    ]),
+    onInit: function () {
+      this.aTotalWasteData = new Array();
+      this.aBackgroundColor = new Array([
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)',
+        'rgba(0, 255, 0, 0.2)'
+      ]);
 
-    onInit: function() {
       Wastecalc = new Wastecalc();
     },
-
 
     onAfterRendering: function () {
       this._getStatisticalValues();
@@ -106,6 +105,49 @@ sap.ui.define([
       this._updateChartWithNewWaste(oClonedItem);
     },
 
+    handleDelete: function (oEvent) {
+      const oList = oEvent.getSource(),
+        oItem = oEvent.getParameter("listItem"),
+        sPath = oItem.getBindingContextPath(),
+        aAllItems = this.getModel("waste_items").getData().wasteItems,
+        index = this.getModel("waste_items").getData().wasteItems.indexOf(this.getModel("waste_items").getProperty(sPath));
+
+      aAllItems.splice(index, 1);
+      this.getModel("waste_items").setData({ wasteItems: aAllItems });
+
+
+      // after deletion put the focus back to the list
+      //oList.attachEventOnce("updateFinished", oList.focus, oList);
+
+      // send a delete request to the odata service
+      // this.getModel("waste_items").remove(sPath);
+    },
+
+    handleSwipe: function (evt) {   // register swipe event
+      var oSwipeContent = evt.getParameter("swipeContent"), // get swiped content from event
+        oSwipeDirection = evt.getParameter("swipeDirection"); // get swiped direction from event
+      var msg = "";
+
+      if (oSwipeDirection === "BeginToEnd") {
+        // List item is approved, change swipeContent(button) text to Disapprove and type to Reject
+        oSwipeContent.setText("Approve").setType("Accept");
+        msg = 'Swipe direction is from the beginning to the end (left ro right in LTR languages)';
+
+      } else {
+        // List item is not approved, change swipeContent(button) text to Approve and type to Accept
+        oSwipeContent.setText("Disapprove").setType("Reject");
+        msg = 'Swipe direction is from the end to the beginning (right to left in LTR languages)';
+      }
+      //MessageToast.show(msg);
+    },
+
+    handleRefresh: function (evt) {
+      setTimeout(function () {
+        this.byId("pullToRefresh").hide();
+        //this._pushNewProduct();
+      }.bind(this), 1000);
+    },
+
     _getChartLabels: function () {
       const oModel = this.getModel("waste_types");
       const oBundle = this.getResourceBundle();
@@ -141,7 +183,7 @@ sap.ui.define([
 
     _geti18nValue: function (sKey) {
       return this.geti18nValue(sKey);
-  },
+    },
 
   });
 });

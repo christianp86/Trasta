@@ -1,5 +1,5 @@
 <mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
-	<f:DynamicPage id="dynamicPageId" preserveHeaderStateOnScroll="true" headerExpanded="true">
+	<f:DynamicPage id="dynamicPageId" headerExpanded="true" >
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:heading>
@@ -33,45 +33,38 @@
 		<!-- DynamicPage Header -->
 		<f:header>
 			<f:DynamicPageHeader pinnable="true">
-				<FlexBox alignItems="Start" justifyContent="SpaceBetween">
-					<items>
-						<Panel backgroundDesign="Transparent" class="sapUiNoContentPadding">
-							<content>
-								<layout:HorizontalLayout allowWrapping="true" class="sapUiResponsiveContentPadding">
-									<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" width="16em"/>
-									<Select id="selectWasteType" selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
+				<layout:HorizontalLayout allowWrapping="true" class="sapUiResponsiveContentPadding">
+					<Input id="inputWasteWeight" type="Number" value="{waste_items>/newWasteItem/weight}" class="sapUiSmallMarginEnd" required="true" placeholder="{i18n>inputWasteWeightPlaceholder}" width="16em" />
+					<Select id="selectWasteType" selectedKey="{waste_items>/newWasteItem/type}" forceSelection="true" items="{
 											path: 'waste_types>/wasteTypes',
 											sorter: { path: 'key' }
 										}" class="sapUiSmallMarginEnd">
-										<core:Item key="{waste_types>key}" text="{path: 'waste_types>key', formatter: '._geti18nValue'}" />
-									</Select>
-									<Button text="{i18n>addWasteButton}" press=".addWaste" />
-								</layout:HorizontalLayout>
-							</content>
-						</Panel>
-					</items>
-				</FlexBox>
+						<core:Item key="{waste_types>key}" text="{path: 'waste_types>key', formatter: '._geti18nValue'}" />
+					</Select>
+					<Button text="{i18n>addWasteButton}" press=".addWaste" />
+				</layout:HorizontalLayout>
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
 			<layout:VerticalLayout class="sapUiResponsiveContentPadding" width="100%">
 
 				<core:HTML content="&lt;canvas id=&quot;barChart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;"></core:HTML>
-				<Table id="idWasteItemsTable" inset="false" items="{
+				<PullToRefresh id="pullToRefresh" visible="{device>/isTouch}" refresh="handleRefresh" />
+				<Table id="idWasteItemsTable" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{
 						path: 'waste_items>/wasteItems',
 						sorter: {
 							path: 'date'
 						}
-					}">
+					}" swipe="handleSwipe">
 					<columns>
 						<Column>
-							<Text text="Type" />
+							<Text text="{i18n>rowType}" />
 						</Column>
 						<Column>
-							<Text text="Weight" />
+							<Text text="{i18n>rowWeight}" />
 						</Column>
 						<Column>
-							<Text text="Date added" />
+							<Text text="{i18n>rowDate}" />
 						</Column>
 					</columns>
 					<items>
@@ -90,6 +83,9 @@
 							</cells>
 						</ColumnListItem>
 					</items>
+					<swipeContent>
+						<Button press="handleReject" />
+					</swipeContent>
 				</Table>
 			</layout:VerticalLayout>
 		</f:content>

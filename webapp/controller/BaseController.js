@@ -50,7 +50,7 @@ sap.ui.define([
 
         /**
 		 * Clones an object
-		 * @private
+		 * @protected
          * @param {obj} obj Object to be cloned
 		 * @returns {Object} Cloned Object
 		 */
@@ -88,7 +88,7 @@ sap.ui.define([
 
         /**
 		 * Gets waste items as array from model
-		 * @private
+		 * @protected
 		 * @returns {Array} Waste Items Entries of model
 		 */
         _getWasteItemsFromModel: function () {
@@ -98,7 +98,7 @@ sap.ui.define([
 
         /**
 		 * Sets waste items as array from model
-		 * @private
+		 * @protected
          * @param {Array} aWasteItems Waste Items Entries
 		 */
         _setWasteItemsInModel: function (aWasteItems) {

@@ -106,21 +106,13 @@ sap.ui.define([
     },
 
     handleDelete: function (oEvent) {
-      const oList = oEvent.getSource(),
-        oItem = oEvent.getParameter("listItem"),
+      const oItem = oEvent.getParameter("listItem"),
         sPath = oItem.getBindingContextPath(),
         aAllItems = this.getModel("waste_items").getData().wasteItems,
         index = this.getModel("waste_items").getData().wasteItems.indexOf(this.getModel("waste_items").getProperty(sPath));
 
       aAllItems.splice(index, 1);
       this.getModel("waste_items").setData({ wasteItems: aAllItems });
-
-
-      // after deletion put the focus back to the list
-      //oList.attachEventOnce("updateFinished", oList.focus, oList);
-
-      // send a delete request to the odata service
-      // this.getModel("waste_items").remove(sPath);
     },
 
     handleSwipe: function (evt) {   // register swipe event

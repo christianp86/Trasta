@@ -1,5 +1,5 @@
 <mvc:View controllerName="com.fidschenberger.wasteStatsApp.controller.Home" displayBlock="true" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" xmlns:mvc="sap.ui.core.mvc">
-	<f:DynamicPage id="dynamicPageId" headerExpanded="true" >
+	<f:DynamicPage id="dynamicPageId" headerExpanded="true">
 		<f:title>
 			<f:DynamicPageTitle>
 				<f:heading>
@@ -47,7 +47,14 @@
 		</f:header>
 		<f:content>
 			<layout:VerticalLayout class="sapUiResponsiveContentPadding" width="100%">
-
+				<OverflowToolbar id="mainToolbar">
+					<Label text="{i18n>toolBarTitle}" />
+					<ToolbarSpacer />
+					<Button icon="sap-icon://bar-chart" tooltip="{i18n>ttpBarChart}" type="Transparent" />
+					<Button icon="sap-icon://donut-chart" tooltip="{i18n>ttpDonutChart}" type="Transparent" />
+					<Button icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" type="Transparent" />
+					<Button icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" type="Transparent" />
+				</OverflowToolbar>
 				<core:HTML content="&lt;canvas id=&quot;barChart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;"></core:HTML>
 				<PullToRefresh id="pullToRefresh" visible="{device>/isTouch}" refresh="handleRefresh" />
 				<Table id="idWasteItemsTable" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{

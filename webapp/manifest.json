@@ -10,7 +10,6 @@
 		"title": "{{appTitle}}",
 		"description": "{{appDescription}}"
 	},
-
 	"sap.ui": {
 		"technology": "UI5",
 		"icons": {
@@ -27,7 +26,6 @@
 			"phone": true
 		}
 	},
-
 	"sap.ui5": {
 		"rootView": {
 			"viewName": "com.fidschenberger.wasteStatsApp.view.App",
@@ -36,7 +34,7 @@
 			"id": "app"
 		},
 		"dependencies": {
-			"minUI5Version": "1.74.0",
+			"minUI5Version": "1.76.0",
 			"libs": {
 				"sap.ui.core": {},
 				"sap.m": {},
@@ -72,9 +70,11 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
 		},
 		"routing": {
 			"config": {
@@ -89,7 +89,9 @@
 				{
 					"pattern": "",
 					"name": "home",
-					"target": ["home"]
+					"target": [
+						"home"
+					]
 				}
 			],
 			"targets": {

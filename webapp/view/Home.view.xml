@@ -55,9 +55,11 @@
 					<Button icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" type="Transparent" />
 					<Button icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" type="Transparent" />
 				</OverflowToolbar>
+
 				<core:HTML content="&lt;canvas id=&quot;barChart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;"></core:HTML>
+
 				<PullToRefresh id="pullToRefresh" visible="{device>/isTouch}" refresh="handleRefresh" />
-				<Table id="idWasteItemsTable" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{
+				<Table id="idWasteItemsTable" visible="true" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{
 						path: 'waste_items>/wasteItems',
 						sorter: {
 							path: 'date'

@@ -33,6 +33,7 @@ sap.ui.define([
     },
 
     onAfterRendering: function () {
+
       this._getStatisticalValues();
       var ctx = document.getElementById("barChart");
       this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
@@ -75,6 +76,7 @@ sap.ui.define([
         }
       });
 
+      this.hideBusyIndicator();
     },
 
     addWaste: function () {

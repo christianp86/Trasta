@@ -18,6 +18,9 @@ sap.ui.define([
 	return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
 
 		onInit: function () {
+
+			this.showBusyIndicator();
+
 			localforage.getItem('waste')
 				.then((value) => {
 					if (value !== null) {

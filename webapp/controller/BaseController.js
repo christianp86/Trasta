@@ -1,7 +1,8 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/ui/core/BusyIndicator",
     "sap/ui/core/UIComponent"
-], function (Controller, UIComponent) {
+], function (Controller, BusyIndicator, UIComponent) {
     "use strict";
 
     return Controller.extend("com.fidschenberger.wasteStatsApp.controller.BaseController", {
@@ -46,6 +47,22 @@ sap.ui.define([
 
         geti18nValue: function (sKey) {
             return this.getResourceBundle().getText(sKey);
+        },
+
+        /**
+         * Displays global busy indicator
+         * @protected
+         */
+        showBusyIndicator : function () {
+            BusyIndicator.show();
+        },
+
+        /**
+         * Hides global busy indicator
+         * @protected
+         */
+        hideBusyIndicator : function () {
+            BusyIndicator.hide();
         },
 
         /**

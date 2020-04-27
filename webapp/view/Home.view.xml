@@ -46,20 +46,29 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<layout:VerticalLayout class="sapUiResponsiveContentPadding" width="100%">
+			<layout:VerticalLayout id="verticalLayout" class="sapUiResponsiveContentPadding" width="100%">
 				<OverflowToolbar id="mainToolbar">
 					<Label text="{i18n>toolBarTitle}" />
 					<ToolbarSpacer />
+					<SegmentedButton selectedKey="bar" selectionChange="onSelectionChange">
+						<items>
+							<SegmentedButtonItem icon="sap-icon://bar-chart" tooltip="{i18n>ttpBarChart}" key="bar" />
+							<SegmentedButtonItem icon="sap-icon://donut-chart" tooltip="{i18n>ttpDonutChart}" key="pie" />
+							<SegmentedButtonItem icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" key="chart_table" />
+							<SegmentedButtonItem icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" key="table" />
+						</items>
+					</SegmentedButton>
+					<!-- 					<ToolbarSpacer />
 					<Button icon="sap-icon://bar-chart" tooltip="{i18n>ttpBarChart}" type="Transparent" />
 					<Button icon="sap-icon://donut-chart" tooltip="{i18n>ttpDonutChart}" type="Transparent" />
-					<Button icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" type="Transparent" />
-					<Button icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" type="Transparent" />
+					<Button icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" type="Transparent" press="" />
+					<Button icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" type="Transparent" press="displayElement" /> -->
 				</OverflowToolbar>
 
-				<core:HTML content="&lt;canvas id=&quot;barChart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;"></core:HTML>
+				<core:HTML id="Chart" visible="{configuration>/visibility/chart}" content="&lt;canvas id=&quot;Chart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;" />
 
 				<PullToRefresh id="pullToRefresh" visible="{device>/isTouch}" refresh="handleRefresh" />
-				<Table id="idWasteItemsTable" visible="true" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{
+				<Table id="idWasteItemsTable" visible="{configuration>/visibility/table}" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{
 						path: 'waste_items>/wasteItems',
 						sorter: {
 							path: 'date'

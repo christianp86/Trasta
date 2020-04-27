@@ -18,7 +18,8 @@ sap.ui.define([
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
 
     onInit: function () {
-      this.aTotalWasteData = new Array();
+      Wastecalc = new Wastecalc();
+
       this.aBackgroundColor = new Array([
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -29,17 +30,28 @@ sap.ui.define([
         'rgba(0, 255, 0, 0.2)'
       ]);
 
-      Wastecalc = new Wastecalc();
+      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+      this._calculateStatisticalValues();
+      this.oCanvas = this.byId("Chart");
     },
 
     onAfterRendering: function () {
+      var ctx = document.getElementById("Chart");
+      if (ctx === null) {
+        this.hideBusyIndicator();
+        return;
+      }
 
-      this._getStatisticalValues();
-      var ctx = document.getElementById("barChart");
-      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+      this._drawChart();
+      this.hideBusyIndicator();
+    },
+
+    _drawChart: function () {
+      var ctx = document.getElementById("Chart");
+      const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
 
       this.myChart = new Chart(ctx, {
-        type: 'bar',
+        type: sChartType,
         data: {
           labels: this._getChartLabels(),
           datasets: [{
@@ -52,7 +64,8 @@ sap.ui.define([
               'rgba(75, 192, 192, 0.2)',
               'rgba(153, 102, 255, 0.2)',
               'rgba(255, 159, 64, 0.2)',
-              'rgba(0, 255, 0, 0.2)'],
+              'rgba(0, 255, 0, 0.2)'
+            ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
@@ -75,8 +88,6 @@ sap.ui.define([
           }
         }
       });
-
-      this.hideBusyIndicator();
     },
 
     addWaste: function () {
@@ -105,6 +116,54 @@ sap.ui.define([
 
       this._saveModelInDB();
       this._updateChartWithNewWaste(oClonedItem);
+    },
+
+    onSelectionChange: function (oEvent) {
+      const sSelectedKey = oEvent.getSource().getProperty("selectedKey");
+      const oModel = this.getModel("configuration");
+
+      const oChartCanvas = sap.ui.getCore().byId("Chart");
+      const oViewChartCanvas = this.byId("Chart");
+      const oVerticalLayout = this.byId("verticalLayout");
+
+      switch (sSelectedKey) {
+        case "bar":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", false);
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+
+          /* if (oViewChartCanvas === undefined) {
+            const oChartCanvas = new sap.ui.core.HTML("Chart", {
+              content: '<canvas id="Chart" width="800" height="650"></canvas>',
+              visible: '{configuration>/visibility/chart}'
+            }); */
+          oVerticalLayout.insertContent(this.oCanvas, 1);
+          this._drawChart();
+          //}
+
+          break;
+        case "pie":
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", false);
+          break;
+
+        case "chart_table":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", true);
+          break;
+
+        case "table":
+          oModel.setProperty("/visibility/chart", false);
+          oModel.setProperty("/visibility/table", true);
+          oVerticalLayout.removeContent(1);
+          //if (oViewChartCanvas === undefined ? oChartCanvas.destroy() : oViewChartCanvas.destroy());
+          //this.myChart.destroy();
+          break;
+
+        default:
+          break;
+      }
     },
 
     handleDelete: function (oEvent) {
@@ -170,7 +229,7 @@ sap.ui.define([
       this.myChart.update();
     },
 
-    _getStatisticalValues: async function () {
+    _calculateStatisticalValues: async function () {
       const oModel = this.getModel("waste_statistics");
       oModel.setProperty("/totalWaste", Wastecalc.calculateTotalWaste(this._getWasteItemsFromModel()));
     },
@@ -181,3 +240,5 @@ sap.ui.define([
 
   });
 });
+
+

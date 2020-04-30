@@ -30,13 +30,34 @@ sap.ui.define([
         'rgba(0, 255, 0, 0.2)'
       ]);
 
+      this.oChartOptions = {
+        responsive: true,
+        legend: {
+          align: 'center',
+          position: 'top',
+          title: {
+            display: true,
+            text: 'Legend Title',
+            position: 'top',
+          }
+        }
+      };
+
+      this.oChartScales = {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      };
+
       this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
       this._calculateStatisticalValues();
       this.oCanvas = this.byId("Chart");
     },
 
     onAfterRendering: function () {
-      var ctx = document.getElementById("Chart");
+      const ctx = document.getElementById("Chart");
       if (ctx === null) {
         this.hideBusyIndicator();
         return;
@@ -47,8 +68,18 @@ sap.ui.define([
     },
 
     _drawChart: function () {
-      var ctx = document.getElementById("Chart");
+      const ctx = document.getElementById("Chart");
       const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
+      let options = this.oChartOptions;
+      
+      if (this.myChart !== undefined)
+        this.myChart.destroy();
+
+      if (sChartType !== 'pie') {
+        options = {
+          ...this.options, scales: this.oChartScales
+        };
+      }
 
       this.myChart = new Chart(ctx, {
         type: sChartType,
@@ -78,15 +109,7 @@ sap.ui.define([
             borderWidth: 1
           }]
         },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        }
+        options: options
       });
     },
 
@@ -121,9 +144,6 @@ sap.ui.define([
     onSelectionChange: function (oEvent) {
       const sSelectedKey = oEvent.getSource().getProperty("selectedKey");
       const oModel = this.getModel("configuration");
-
-      const oChartCanvas = sap.ui.getCore().byId("Chart");
-      const oViewChartCanvas = this.byId("Chart");
       const oVerticalLayout = this.byId("verticalLayout");
 
       switch (sSelectedKey) {
@@ -132,33 +152,36 @@ sap.ui.define([
           oModel.setProperty("/visibility/table", false);
           oModel.setProperty("/selectedChartType", sSelectedKey);
 
-          /* if (oViewChartCanvas === undefined) {
-            const oChartCanvas = new sap.ui.core.HTML("Chart", {
-              content: '<canvas id="Chart" width="800" height="650"></canvas>',
-              visible: '{configuration>/visibility/chart}'
-            }); */
-          oVerticalLayout.insertContent(this.oCanvas, 1);
-          this._drawChart();
-          //}
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
+            oVerticalLayout.insertContent(this.oCanvas, 1);
 
+          this._drawChart();
           break;
+
         case "pie":
-          oModel.setProperty("/selectedChartType", sSelectedKey);
           oModel.setProperty("/visibility/chart", true);
           oModel.setProperty("/visibility/table", false);
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+
+          this._drawChart();
           break;
 
         case "chart_table":
           oModel.setProperty("/visibility/chart", true);
           oModel.setProperty("/visibility/table", true);
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1) {
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+            this._drawChart();
+          }
           break;
 
         case "table":
           oModel.setProperty("/visibility/chart", false);
           oModel.setProperty("/visibility/table", true);
           oVerticalLayout.removeContent(1);
-          //if (oViewChartCanvas === undefined ? oChartCanvas.destroy() : oViewChartCanvas.destroy());
-          //this.myChart.destroy();
           break;
 
         default:

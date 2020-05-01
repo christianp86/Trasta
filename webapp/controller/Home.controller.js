@@ -20,6 +20,7 @@ sap.ui.define([
     onInit: function () {
       Wastecalc = new Wastecalc();
 
+      this.oCanvas = this.byId("Chart");
       this.aBackgroundColor = new Array([
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -53,7 +54,6 @@ sap.ui.define([
 
       this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
       this._calculateStatisticalValues();
-      this.oCanvas = this.byId("Chart");
     },
 
     onAfterRendering: function () {

@@ -19,11 +19,11 @@ sap.ui.define([
                     result.aCumulatedWaste.push(
                         result[sType] = {
                             type: sType,
-                            totalWeight: oWasteItem.weight
+                            totalWeight: oWasteItem.weight / 1000
                         }
                     );
                 } else {
-                    result[sType].totalWeight += oWasteItem.weight;
+                    result[sType].totalWeight += oWasteItem.weight / 1000;
                 }
 
                 return result;

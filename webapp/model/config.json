@@ -1,5 +1,10 @@
 {
     "config": {
-        "enable-auth0": "false"
-    }
+        "enable-auth0": false
+    },
+    "visibility": {
+        "chart" : true,
+        "table" : false
+    },
+    "selectedChartType": "bar"
 }

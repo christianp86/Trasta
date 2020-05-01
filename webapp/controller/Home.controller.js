@@ -18,7 +18,9 @@ sap.ui.define([
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
 
     onInit: function () {
-      this.aTotalWasteData = new Array();
+      Wastecalc = new Wastecalc();
+
+      this.oCanvas = this.byId("Chart");
       this.aBackgroundColor = new Array([
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -29,17 +31,58 @@ sap.ui.define([
         'rgba(0, 255, 0, 0.2)'
       ]);
 
-      Wastecalc = new Wastecalc();
+      this.oChartOptions = {
+        responsive: true,
+        legend: {
+          align: 'center',
+          position: 'top',
+          title: {
+            display: true,
+            text: 'Legend Title',
+            position: 'top',
+          }
+        }
+      };
+
+      this.oChartScales = {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      };
+
+      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+      this._calculateStatisticalValues();
     },
 
     onAfterRendering: function () {
+      const ctx = document.getElementById("Chart");
+      if (ctx === null) {
+        this.hideBusyIndicator();
+        return;
+      }
 
-      this._getStatisticalValues();
-      var ctx = document.getElementById("barChart");
-      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+      this._drawChart();
+      this.hideBusyIndicator();
+    },
+
+    _drawChart: function () {
+      const ctx = document.getElementById("Chart");
+      const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
+      let options = this.oChartOptions;
+      
+      if (this.myChart !== undefined)
+        this.myChart.destroy();
+
+      if (sChartType !== 'pie') {
+        options = {
+          ...this.options, scales: this.oChartScales
+        };
+      }
 
       this.myChart = new Chart(ctx, {
-        type: 'bar',
+        type: sChartType,
         data: {
           labels: this._getChartLabels(),
           datasets: [{
@@ -52,7 +95,8 @@ sap.ui.define([
               'rgba(75, 192, 192, 0.2)',
               'rgba(153, 102, 255, 0.2)',
               'rgba(255, 159, 64, 0.2)',
-              'rgba(0, 255, 0, 0.2)'],
+              'rgba(0, 255, 0, 0.2)'
+            ],
             borderColor: [
               'rgba(255, 99, 132, 1)',
               'rgba(54, 162, 235, 1)',
@@ -65,18 +109,8 @@ sap.ui.define([
             borderWidth: 1
           }]
         },
-        options: {
-          scales: {
-            yAxes: [{
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        }
+        options: options
       });
-
-      this.hideBusyIndicator();
     },
 
     addWaste: function () {
@@ -105,6 +139,54 @@ sap.ui.define([
 
       this._saveModelInDB();
       this._updateChartWithNewWaste(oClonedItem);
+    },
+
+    onSelectionChange: function (oEvent) {
+      const sSelectedKey = oEvent.getSource().getProperty("selectedKey");
+      const oModel = this.getModel("configuration");
+      const oVerticalLayout = this.byId("verticalLayout");
+
+      switch (sSelectedKey) {
+        case "bar":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", false);
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+
+          this._drawChart();
+          break;
+
+        case "pie":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", false);
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+
+          this._drawChart();
+          break;
+
+        case "chart_table":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", true);
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1) {
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+            this._drawChart();
+          }
+          break;
+
+        case "table":
+          oModel.setProperty("/visibility/chart", false);
+          oModel.setProperty("/visibility/table", true);
+          oVerticalLayout.removeContent(1);
+          break;
+
+        default:
+          break;
+      }
     },
 
     handleDelete: function (oEvent) {
@@ -170,7 +252,7 @@ sap.ui.define([
       this.myChart.update();
     },
 
-    _getStatisticalValues: async function () {
+    _calculateStatisticalValues: async function () {
       const oModel = this.getModel("waste_statistics");
       oModel.setProperty("/totalWaste", Wastecalc.calculateTotalWaste(this._getWasteItemsFromModel()));
     },
@@ -181,3 +263,5 @@ sap.ui.define([
 
   });
 });
+
+

@@ -24,5 +24,3 @@ Pull requests are always welcome. I will setup a project etc. as well so that pe
 
 ## Credits
 This project has been generated with 💙 and [easy-ui5](https://github.com/SAP)
-
-

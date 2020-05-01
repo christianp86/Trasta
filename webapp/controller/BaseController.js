@@ -73,8 +73,8 @@ sap.ui.define([
 		 */
         _clone: function (obj) {
             if (null == obj || "object" != typeof obj) return obj;
-            var copy = obj.constructor();
-            for (var attr in obj) {
+            let copy = obj.constructor();
+            for (const attr in obj) {
                 if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
             }
             return copy;
@@ -82,7 +82,7 @@ sap.ui.define([
 
         _saveModelInDB: function () {
 
-            var aWaste = this._getWasteItemsFromModel();
+            const aWaste = this._getWasteItemsFromModel();
 
             localforage.setItem('waste', aWaste)
                 .then((value) => {
@@ -109,7 +109,7 @@ sap.ui.define([
 		 * @returns {Array} Waste Items Entries of model
 		 */
         _getWasteItemsFromModel: function () {
-            var oModel = this.getModel("waste_items");
+            const oModel = this.getModel("waste_items");
             return oModel.getProperty("/wasteItems").map(function (oWaste) { return Object.assign({}, oWaste); });
         },
 
@@ -125,7 +125,6 @@ sap.ui.define([
 
         _getConfigValue: function (sParameter) {
             const oModel = this.getModel("configuration");
-            //var oProp = oModel.getProperty("/config").map(function (oWaste) { return Object.assign({}, oWaste); });
             return oModel.getProperty("/config/" + sParameter);
         }
     });

@@ -11,8 +11,7 @@ sap.ui.define([
 	"./BaseController",
 	"sap/base/Log",
 	"com/fidschenberger/wasteStatsApp/libs/localforage.min",
-	"com/fidschenberger/wasteStatsApp/libs/auth0-library"
-], function (Controller, Log, localForage, Auth0) {
+], function (Controller, Log, localForage) {
 	"use strict";
 
 	return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
@@ -31,17 +30,6 @@ sap.ui.define([
 				}).catch((err) => {
 					Log.error(err);
 				});
-
-			this.initAuth0();
-		},
-
-		initAuth0: async function () {
-			if (this._getConfigValue("enable-auth0") === false)
-				return;
-
-			const auth0 = new Auth0();
-			await auth0.configureClient();
-			await auth0.updateUI();
 		}
 
 	});

@@ -115,22 +115,22 @@ sap.ui.define([
 
     addWaste: function () {
       const oModel = this.getModel("waste_items");
-      var aWaste = this._getWasteItemsFromModel();
+      let aWaste = this._getWasteItemsFromModel();
 
-      var oNewItem = oModel.getProperty("/newWasteItem");
+      let oNewItem = oModel.getProperty("/newWasteItem");
 
       if (oNewItem.type === null || oNewItem.type === "") {
-        var oSelect = this.getView().byId("selectWasteType");
+        const oSelect = this.getView().byId("selectWasteType");
         oNewItem.type = oSelect.getSelectedKey();
       }
 
       oNewItem.weight = Number(oNewItem.weight);
       oNewItem.date = String(Date.now());
 
-      var oClonedItem = this._clone(oNewItem);
+      const oClonedItem = this._clone(oNewItem);
       aWaste.push(oClonedItem);
 
-      for (var propt in oNewItem) {
+      for (const propt in oNewItem) {
         oNewItem[propt] = "";
       }
 
@@ -200,7 +200,7 @@ sap.ui.define([
     },
 
     handleSwipe: function (evt) {   // register swipe event
-      var oSwipeContent = evt.getParameter("swipeContent"), // get swiped content from event
+/*       var oSwipeContent = evt.getParameter("swipeContent"), // get swiped content from event
         oSwipeDirection = evt.getParameter("swipeDirection"); // get swiped direction from event
       var msg = "";
 
@@ -214,7 +214,7 @@ sap.ui.define([
         oSwipeContent.setText("Disapprove").setType("Reject");
         msg = 'Swipe direction is from the end to the beginning (right to left in LTR languages)';
       }
-      //MessageToast.show(msg);
+      //MessageToast.show(msg); */
     },
 
     handleRefresh: function (evt) {
@@ -246,7 +246,7 @@ sap.ui.define([
       const isWasteType = (element) => element.type === oWasteItem.type;
       const index = this.aTotalWasteData.findIndex(isWasteType);
       let value = this.myChart.data.datasets[0].data[index];
-      value += oWasteItem.weight;
+      value += oWasteItem.weight / 1000;
 
       this.myChart.data.datasets[0].data[index] = value;
       this.myChart.update();

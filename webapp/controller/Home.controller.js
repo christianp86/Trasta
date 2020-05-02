@@ -38,7 +38,7 @@ sap.ui.define([
 
       localforage.getItem('waste')
         .then((value) => {
-          if (value !== null || value !== undefined) {
+          if (value !== null) {
             Log.info("Load data from localForage");
             this._setWasteItemsInModel(value);
           } else {

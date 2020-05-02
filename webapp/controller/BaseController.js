@@ -1,8 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
+    "sap/base/Log",
+    "sap/ui/core/EventBus",
     "sap/ui/core/BusyIndicator",
     "sap/ui/core/UIComponent"
-], function (Controller, BusyIndicator, UIComponent) {
+], function (Controller, Log, EventBus, BusyIndicator, UIComponent) {
     "use strict";
 
     return Controller.extend("com.fidschenberger.wasteStatsApp.controller.BaseController", {
@@ -119,8 +121,12 @@ sap.ui.define([
          * @param {Array} aWasteItems Waste Items Entries
 		 */
         _setWasteItemsInModel: function (aWasteItems) {
+            Log.info("_setWasteItemsInModel : Waste Items = " + aWasteItems.length);
             const oModel = this.getModel("waste_items");
             oModel.setProperty('/wasteItems', aWasteItems);
+
+            EventBus = sap.ui.getCore().getEventBus();
+            EventBus.publish("WasteItems", "Available");
         },
 
         _getConfigValue: function (sParameter) {

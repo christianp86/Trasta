@@ -1,11 +1,4 @@
-sap.ui.loader.config({
-	shim: {
-		'com/fidschenberger/wasteStatsApp/libs/localforage.min': {
-			amd: true,
-			exports: 'localForage'
-		}
-	}
-});
+
 
 sap.ui.define([
 	"./BaseController",
@@ -15,22 +8,6 @@ sap.ui.define([
 	"use strict";
 
 	return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
-
-		onInit: function () {
-
-			this.showBusyIndicator();
-
-			localforage.getItem('waste')
-				.then((value) => {
-					if (value !== null) {
-						this._setWasteItemsInModel(value);
-					} else {
-						this._loadDataFromJSON();
-					}
-				}).catch((err) => {
-					Log.error(err);
-				});
-		}
 
 	});
 });

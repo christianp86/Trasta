@@ -7,20 +7,50 @@ sap.ui.loader.config({
   }
 });
 
+sap.ui.loader.config({
+  shim: {
+    'com/fidschenberger/wasteStatsApp/libs/localforage.min': {
+      amd: true,
+      exports: 'localForage'
+    }
+  }
+});
+
 sap.ui.define([
   "./BaseController",
   "sap/base/Log",
+  "sap/ui/core/EventBus",
   "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min",
-  "com/fidschenberger/wasteStatsApp/libs/waste-stats-calc"
-], function (Controller, Log, Chart, Wastecalc) {
+  "com/fidschenberger/wasteStatsApp/libs/waste-stats-calc",
+  "com/fidschenberger/wasteStatsApp/libs/localforage.min",
+], function (Controller, Log, EventBus, Chart, Wastecalc, localForage) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
 
     onInit: function () {
+      this.showBusyIndicator();
+      this.oCanvas = this.byId("Chart");
+
+      EventBus = sap.ui.getCore().getEventBus();
+      EventBus.subscribe("WasteItems", "Available", this._initializeChart, this);
       Wastecalc = new Wastecalc();
 
-      this.oCanvas = this.byId("Chart");
+      localforage.getItem('waste')
+        .then((value) => {
+          if (value !== null || value !== undefined) {
+            Log.info("Load data from localForage");
+            this._setWasteItemsInModel(value);
+          } else {
+            Log.info("Load data from JSON file");
+            this._loadDataFromJSON();
+          }
+        }).catch((err) => {
+          Log.error(err);
+        });
+
+      
+
       this.aBackgroundColor = new Array([
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -52,12 +82,16 @@ sap.ui.define([
         }]
       };
 
-      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
-      this._calculateStatisticalValues();
+
+
+
     },
 
-    onAfterRendering: function () {
-      const ctx = document.getElementById("Chart");
+    _initializeChart: function (sChannelId, sEventId, oData) {
+      this._calculateStatisticalValues();
+      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+
+      const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
       if (ctx === null) {
         this.hideBusyIndicator();
         return;
@@ -68,10 +102,10 @@ sap.ui.define([
     },
 
     _drawChart: function () {
-      const ctx = document.getElementById("Chart");
+      const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
       const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
       let options = this.oChartOptions;
-      
+
       if (this.myChart !== undefined)
         this.myChart.destroy();
 
@@ -200,21 +234,21 @@ sap.ui.define([
     },
 
     handleSwipe: function (evt) {   // register swipe event
-/*       var oSwipeContent = evt.getParameter("swipeContent"), // get swiped content from event
-        oSwipeDirection = evt.getParameter("swipeDirection"); // get swiped direction from event
-      var msg = "";
-
-      if (oSwipeDirection === "BeginToEnd") {
-        // List item is approved, change swipeContent(button) text to Disapprove and type to Reject
-        oSwipeContent.setText("Approve").setType("Accept");
-        msg = 'Swipe direction is from the beginning to the end (left ro right in LTR languages)';
-
-      } else {
-        // List item is not approved, change swipeContent(button) text to Approve and type to Accept
-        oSwipeContent.setText("Disapprove").setType("Reject");
-        msg = 'Swipe direction is from the end to the beginning (right to left in LTR languages)';
-      }
-      //MessageToast.show(msg); */
+      /*       var oSwipeContent = evt.getParameter("swipeContent"), // get swiped content from event
+              oSwipeDirection = evt.getParameter("swipeDirection"); // get swiped direction from event
+            var msg = "";
+      
+            if (oSwipeDirection === "BeginToEnd") {
+              // List item is approved, change swipeContent(button) text to Disapprove and type to Reject
+              oSwipeContent.setText("Approve").setType("Accept");
+              msg = 'Swipe direction is from the beginning to the end (left ro right in LTR languages)';
+      
+            } else {
+              // List item is not approved, change swipeContent(button) text to Approve and type to Accept
+              oSwipeContent.setText("Disapprove").setType("Reject");
+              msg = 'Swipe direction is from the end to the beginning (right to left in LTR languages)';
+            }
+            //MessageToast.show(msg); */
     },
 
     handleRefresh: function (evt) {
@@ -239,6 +273,8 @@ sap.ui.define([
     },
 
     _getChartData: function () {
+      if (this.aTotalWasteData === undefined)
+        this.aTotalWasteData = [];
       return this.aTotalWasteData.map(function (oTotalItem) { return oTotalItem.totalWeight });
     },
 

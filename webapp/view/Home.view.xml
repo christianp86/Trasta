@@ -16,8 +16,8 @@
 				</f:snappedTitleOnMobile>
 				<f:content>
 					<OverflowToolbar>
-						<GenericTag text="{i18n>totalWaste}" status="Warning" press="onGenericTagPress" design="StatusIconHidden">
-							<ObjectNumber number="{waste_statistics>/totalWaste}" numberUnit="KG" emphasized="false" state="Warning" />
+						<GenericTag text="{i18n>totalWaste}" status="Warning" design="StatusIconHidden">
+							<ObjectNumber number="{waste_statistics>/totalWaste}" unit="KG" emphasized="false" state="Warning" />
 						</GenericTag>
 					</OverflowToolbar>
 				</f:content>
@@ -58,16 +58,11 @@
 							<SegmentedButtonItem icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" key="table" />
 						</items>
 					</SegmentedButton>
-					<!-- 					<ToolbarSpacer />
-					<Button icon="sap-icon://bar-chart" tooltip="{i18n>ttpBarChart}" type="Transparent" />
-					<Button icon="sap-icon://donut-chart" tooltip="{i18n>ttpDonutChart}" type="Transparent" />
-					<Button icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" type="Transparent" press="" />
-					<Button icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" type="Transparent" press="displayElement" /> -->
 				</OverflowToolbar>
 
-				<core:HTML id="Chart" visible="{configuration>/visibility/chart}" content="&lt;canvas id=&quot;Chart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;" />
+				<core:HTML id="Chart" visible="{configuration>/visibility/chart}" content="&lt;canvas id=&quot;container-wasteStatsApp---home--Chart&quot; width=&quot;800&quot; height=&quot;650&quot;&gt;&lt;/canvas&gt;" />
 
-				<PullToRefresh id="pullToRefresh" visible="{device>/isTouch}" refresh="handleRefresh" />
+				<PullToRefresh id="pullToRefresh" visible="false" refresh="handleRefresh" />
 				<Table id="idWasteItemsTable" visible="{configuration>/visibility/table}" inset="false" mode="Delete" delete="handleDelete" enableBusyIndicator="true" items="{
 						path: 'waste_items>/wasteItems',
 						sorter: {
@@ -101,9 +96,9 @@
 							</cells>
 						</ColumnListItem>
 					</items>
-					<swipeContent>
+<!-- 					<swipeContent>
 						<Button press="handleReject" />
-					</swipeContent>
+					</swipeContent> -->
 				</Table>
 			</layout:VerticalLayout>
 		</f:content>

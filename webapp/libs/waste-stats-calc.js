@@ -6,8 +6,8 @@ sap.ui.define([
 
     return Object.extend("com.fidschenberger.wasteStatsApp.libs.wasteStatsCalculator", {
 
-        calculateTotalWasteValues: function(aWasteItems) {
-            Log.info("Total waste items:" + aWasteItems.length );
+        calculateTotalWasteValues: function (aWasteItems) {
+            Log.info("Total waste items:" + aWasteItems.length);
             return this._calculateTotals(aWasteItems);
         },
 
@@ -42,8 +42,8 @@ sap.ui.define([
                 return result.hasOwnProperty("weight") ? result.weight += oWasteItem.weight : result += oWasteItem.weight
             }) / 1000;
 
-           Log.info("Total Waste:" + iTotal);
-           return iTotal;
+            Log.info("Total Waste:" + iTotal);
+            return iTotal;
         },
     });
 

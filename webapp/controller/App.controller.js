@@ -1,10 +1,7 @@
-
-
 sap.ui.define([
 	"./BaseController",
-	"sap/base/Log",
-	"com/fidschenberger/wasteStatsApp/libs/localforage.min",
-], function (Controller, Log, localForage) {
+	"sap/base/Log"
+], function (Controller, Log) {
 	"use strict";
 
 	return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {

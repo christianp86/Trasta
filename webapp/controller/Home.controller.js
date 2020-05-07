@@ -29,12 +29,11 @@ sap.ui.define([
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
 
     onInit: function () {
-      this.showBusyIndicator();
       this.oCanvas = this.byId("Chart");
+      Wastecalc = new Wastecalc();
 
       EventBus = sap.ui.getCore().getEventBus();
       EventBus.subscribe("WasteItems", "Available", this._initializeChart, this);
-      Wastecalc = new Wastecalc();
 
       localforage.getItem('waste')
         .then((value) => {
@@ -48,8 +47,6 @@ sap.ui.define([
         }).catch((err) => {
           Log.error(err);
         });
-
-      
 
       this.aBackgroundColor = new Array([
         'rgba(255, 99, 132, 0.2)',
@@ -81,34 +78,27 @@ sap.ui.define([
           }
         }]
       };
-
-
-
-
     },
 
     _initializeChart: function (sChannelId, sEventId, oData) {
-      this._calculateStatisticalValues();
-      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+      this._calculateKPIs();
+      this.aTotalWasteData = this._calculateChartDataByMode();
+      this._drawChart(this.aTotalWasteData);
+      this.hideBusyIndicator();
+    },
 
+    _drawChart: function (aChartDataAndLabel) {
       const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
       if (ctx === null) {
         this.hideBusyIndicator();
         return;
       }
 
-      this._drawChart();
-      this.hideBusyIndicator();
-    },
-
-    _drawChart: function () {
-      const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
-      const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
-      let options = this.oChartOptions;
-
       if (this.myChart !== undefined)
         this.myChart.destroy();
 
+      const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
+      let options = this.oChartOptions;
       if (sChartType !== 'pie') {
         options = {
           ...this.options, scales: this.oChartScales
@@ -118,10 +108,10 @@ sap.ui.define([
       this.myChart = new Chart(ctx, {
         type: sChartType,
         data: {
-          labels: this._getChartLabels(),
+          labels: this._getChartLabels(aChartDataAndLabel),
           datasets: [{
             label: this.getResourceBundle().getText('chartLabelTotal'),
-            data: this._getChartData(),
+            data: this._getChartData(aChartDataAndLabel),
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
@@ -189,7 +179,7 @@ sap.ui.define([
           if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
             oVerticalLayout.insertContent(this.oCanvas, 1);
 
-          this._drawChart();
+          this._drawChart(this.aTotalWasteData);
           break;
 
         case "pie":
@@ -200,7 +190,7 @@ sap.ui.define([
           if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
             oVerticalLayout.insertContent(this.oCanvas, 1);
 
-          this._drawChart();
+          this._drawChart(this.aTotalWasteData);
           break;
 
         case "chart_table":
@@ -208,7 +198,7 @@ sap.ui.define([
           oModel.setProperty("/visibility/table", true);
           if (oVerticalLayout.indexOfContent(this.oCanvas) === -1) {
             oVerticalLayout.insertContent(this.oCanvas, 1);
-            this._drawChart();
+            this._drawChart(this.aTotalWasteData);
           }
           break;
 
@@ -221,6 +211,11 @@ sap.ui.define([
         default:
           break;
       }
+    },
+
+    onChangeDisplayMode: function (oEvent) {
+      this.aTotalWasteData = this._calculateChartDataByMode();
+      this._drawChart(this.aTotalWasteData);
     },
 
     handleDelete: function (oEvent) {
@@ -258,28 +253,23 @@ sap.ui.define([
       }.bind(this), 1000);
     },
 
-    _getChartLabels: function () {
-      const oModel = this.getModel("waste_types");
+    _getChartLabels: function (aChartData) {
       const oBundle = this.getResourceBundle();
-      const oData = oModel.getProperty("/wasteTypes").sort((a, b) => {
-        return a.key.localeCompare(b.key);
-      });
+      const fnMap = (oCurrentItem) => {
+        return oCurrentItem.dataType === 'type' ? oBundle.getText(oCurrentItem.label) : oCurrentItem.label;
+      };
 
-      const aWasteTypes = oData.map((oWasteType) => {
-        return oBundle.getText(oWasteType.key);
-      });
-
-      return aWasteTypes;
+      return aChartData.map(fnMap);
     },
 
-    _getChartData: function () {
-      if (this.aTotalWasteData === undefined)
-        this.aTotalWasteData = [];
-      return this.aTotalWasteData.map(function (oTotalItem) { return oTotalItem.totalWeight });
+    _getChartData: function (aCalculatedChartData) {
+      const fnMap = (oTotalItem) => { return oTotalItem.totalWeight };
+
+      return aCalculatedChartData.map(fnMap);
     },
 
     _updateChartWithNewWaste: function (oWasteItem) {
-      const isWasteType = (element) => element.type === oWasteItem.type;
+      const isWasteType = (element) => element.label === oWasteItem.label;
       const index = this.aTotalWasteData.findIndex(isWasteType);
       let value = this.myChart.data.datasets[0].data[index];
       value += oWasteItem.weight / 1000;
@@ -288,13 +278,25 @@ sap.ui.define([
       this.myChart.update();
     },
 
-    _calculateStatisticalValues: async function () {
+    _calculateKPIs: async function () {
       const oModel = this.getModel("waste_statistics");
-      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalWaste(this._getWasteItemsFromModel()));
+      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalTrashKPI(this._getWasteItemsFromModel()));
     },
 
     _geti18nValue: function (sKey) {
       return this.geti18nValue(sKey);
+    },
+
+    _calculateChartDataByMode: function () {
+      const aAllWasteItems = this._getWasteItemsFromModel();
+      switch (this.getModel("configuration").getProperty("/selectedDisplayMode")) {
+        case "TYPE":
+          return Wastecalc.calculateTotalTrashByCategory(aAllWasteItems);
+        case "MONTH":
+          return Wastecalc.calculateTotalsByMonth(aAllWasteItems);
+        default:
+          return [];
+      }
     },
 
   });

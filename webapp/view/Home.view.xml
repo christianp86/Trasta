@@ -50,6 +50,13 @@
 				<OverflowToolbar id="mainToolbar">
 					<Label text="{i18n>toolBarTitle}" />
 					<ToolbarSpacer />
+					<Select id="selectData" selectedKey="{configuration>/selectedDisplayMode}" forceSelection="true" change="onChangeDisplayMode" tooltip="{i18n>ttpSelect}" items="{
+						path: 'waste_types>/dataDisplayMode',
+						sorter: { path: 'key' }
+					}" class="sapUiSmallMarginEnd">
+						<core:Item key="{waste_types>key}" text="{path: 'waste_types>key', formatter: '._geti18nValue'}" />
+					</Select>
+					<ToolbarSpacer />
 					<SegmentedButton selectedKey="bar" selectionChange="onSelectionChange">
 						<items>
 							<SegmentedButtonItem icon="sap-icon://bar-chart" tooltip="{i18n>ttpBarChart}" key="bar" />
@@ -96,7 +103,7 @@
 							</cells>
 						</ColumnListItem>
 					</items>
-<!-- 					<swipeContent>
+					<!-- 					<swipeContent>
 						<Button press="handleReject" />
 					</swipeContent> -->
 				</Table>

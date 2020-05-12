@@ -48,7 +48,7 @@ sap.ui.define([
           Log.error(err);
         });
 
-      this.aBackgroundColor = new Array([
+      this.aBackgroundColor = new Array(
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
         'rgba(255, 206, 86, 0.2)',
@@ -56,7 +56,17 @@ sap.ui.define([
         'rgba(153, 102, 255, 0.2)',
         'rgba(255, 159, 64, 0.2)',
         'rgba(0, 255, 0, 0.2)'
-      ]);
+      );
+
+      this.aBorderColor = new Array(
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(0, 255, 0, 1)'
+      );
 
       this.oChartOptions = {
         responsive: true,
@@ -69,7 +79,7 @@ sap.ui.define([
             position: 'top',
           }
         }
-      };
+      }
 
       this.oChartScales = {
         yAxes: [{
@@ -77,7 +87,16 @@ sap.ui.define([
             beginAtZero: true
           }
         }]
-      };
+      }
+
+      this.oStackedBarChart = {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
     },
 
     _initializeChart: function (sChannelId, sEventId, oData) {
@@ -87,7 +106,12 @@ sap.ui.define([
       this.hideBusyIndicator();
     },
 
-    _drawChart: function (aChartDataAndLabel) {
+    onChangeDisplayMode: function (oEvent) {
+      this.aTotalWasteData = this._calculateChartDataByMode();
+      this._drawChart(this.aTotalWasteData);
+    },
+
+    _drawChart: function (chartDataAndLabel) {
       const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
       if (ctx === null) {
         this.hideBusyIndicator();
@@ -105,36 +129,76 @@ sap.ui.define([
         };
       }
 
+      const chartData = this._createChartDataSets(chartDataAndLabel);
+
       this.myChart = new Chart(ctx, {
         type: sChartType,
         data: {
-          labels: this._getChartLabels(aChartDataAndLabel),
-          datasets: [{
-            label: this.getResourceBundle().getText('chartLabelTotal'),
-            data: this._getChartData(aChartDataAndLabel),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(0, 255, 0, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(0, 255, 0, 1)'
-            ],
-            borderWidth: 1
-          }]
+          labels: this._getChartLabels(chartDataAndLabel),
+          datasets: chartData
         },
         options: options
       });
+    },
+
+    _getChartLabels: function (aChartData) {
+      const oBundle = this.getResourceBundle();
+      const fnMap = (oCurrentItem) => {
+        return oCurrentItem.dataType === 'type' ? oBundle.getText(oCurrentItem.label) : oCurrentItem.label;
+      };
+
+      return aChartData.map(fnMap);
+    },
+
+    _getChartData: function (aCalculatedChartData) {
+      const fnMap = (oTotalItem) => { return oTotalItem.totalWeight };
+
+      return aCalculatedChartData.map(fnMap);
+    },
+
+    _createChartDataSets: function (chartDataAndLabel) {
+      let aDataSets = [];
+      let index = 0;
+
+      if (Array.isArray(chartDataAndLabel)) {
+        aDataSets.push({
+          label: this.getResourceBundle().getText('chartLabelTotal'),
+          data: this._getChartData(chartDataAndLabel),
+          backgroundColor: this.aBackgroundColor,
+          borderColor: this.aBorderColor,
+          borderWidth: 1
+        });
+      } else {
+        // Map
+        chartDataAndLabel.forEach((value, key) => {
+          aDataSets.push({
+            label: this.getResourceBundle().getText(key),
+            backgroundColor: this.aBackgroundColor[index],
+            borderColor: this.aBorderColor[index],
+            borderWidth: 1,
+            data: _getChartData(value)
+          });
+
+          (index === this.aBackgroundColor.length) ? index = 0 : index++;
+
+        });
+      }
+
+      return aDataSets;
+    },
+
+    _calculateChartDataByMode: function () {
+      const aAllWasteItems = this._getWasteItemsFromModel();
+      switch (this.getModel("configuration").getProperty("/selectedDisplayMode")) {
+        case "TYPE":
+          return Wastecalc.calculateTotalTrashByCategory(aAllWasteItems);
+        case "MONTH":
+          return Wastecalc.calculateTotalsByMonth(aAllWasteItems);
+        case "MONTHANDTYPE":
+          return Wastecalc.calculateTotalsByMonthAndType(aAllWasteItems);
+        default:
+          return [];
+      }
     },
 
     addWaste: function () {
@@ -163,6 +227,21 @@ sap.ui.define([
 
       this._saveModelInDB();
       this._updateChartWithNewWaste(oClonedItem);
+    },
+
+    _updateChartWithNewWaste: function (oWasteItem) {
+      const isWasteType = (element) => element.label === oWasteItem.label;
+      const index = this.aTotalWasteData.findIndex(isWasteType);
+      let value = this.myChart.data.datasets[0].data[index];
+      value += oWasteItem.weight / 1000;
+
+      this.myChart.data.datasets[0].data[index] = value;
+      this.myChart.update();
+    },
+
+    _calculateKPIs: async function () {
+      const oModel = this.getModel("waste_statistics");
+      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalTrashKPI(this._getWasteItemsFromModel()));
     },
 
     onSelectionChange: function (oEvent) {
@@ -213,9 +292,11 @@ sap.ui.define([
       }
     },
 
-    onChangeDisplayMode: function (oEvent) {
-      this.aTotalWasteData = this._calculateChartDataByMode();
-      this._drawChart(this.aTotalWasteData);
+    handleRefresh: function (evt) {
+      setTimeout(function () {
+        this.byId("pullToRefresh").hide();
+        //this._pushNewProduct();
+      }.bind(this), 1000);
     },
 
     handleDelete: function (oEvent) {
@@ -246,58 +327,9 @@ sap.ui.define([
             //MessageToast.show(msg); */
     },
 
-    handleRefresh: function (evt) {
-      setTimeout(function () {
-        this.byId("pullToRefresh").hide();
-        //this._pushNewProduct();
-      }.bind(this), 1000);
-    },
-
-    _getChartLabels: function (aChartData) {
-      const oBundle = this.getResourceBundle();
-      const fnMap = (oCurrentItem) => {
-        return oCurrentItem.dataType === 'type' ? oBundle.getText(oCurrentItem.label) : oCurrentItem.label;
-      };
-
-      return aChartData.map(fnMap);
-    },
-
-    _getChartData: function (aCalculatedChartData) {
-      const fnMap = (oTotalItem) => { return oTotalItem.totalWeight };
-
-      return aCalculatedChartData.map(fnMap);
-    },
-
-    _updateChartWithNewWaste: function (oWasteItem) {
-      const isWasteType = (element) => element.label === oWasteItem.label;
-      const index = this.aTotalWasteData.findIndex(isWasteType);
-      let value = this.myChart.data.datasets[0].data[index];
-      value += oWasteItem.weight / 1000;
-
-      this.myChart.data.datasets[0].data[index] = value;
-      this.myChart.update();
-    },
-
-    _calculateKPIs: async function () {
-      const oModel = this.getModel("waste_statistics");
-      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalTrashKPI(this._getWasteItemsFromModel()));
-    },
-
     _geti18nValue: function (sKey) {
       return this.geti18nValue(sKey);
-    },
-
-    _calculateChartDataByMode: function () {
-      const aAllWasteItems = this._getWasteItemsFromModel();
-      switch (this.getModel("configuration").getProperty("/selectedDisplayMode")) {
-        case "TYPE":
-          return Wastecalc.calculateTotalTrashByCategory(aAllWasteItems);
-        case "MONTH":
-          return Wastecalc.calculateTotalsByMonth(aAllWasteItems);
-        default:
-          return [];
-      }
-    },
+    }
 
   });
 });

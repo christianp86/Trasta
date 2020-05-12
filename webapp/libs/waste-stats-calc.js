@@ -55,6 +55,36 @@ sap.ui.define([
             return aTotalsByMonth;
         },
 
+        calculateTotalsByMonthAndType: function (aWasteItems) {
+            let aTotalsByMonthAndType = [];
+            let mTotalsByMonthAndType = new Map();
+
+            const fnGetTotalsByMonthAndType = (oCurrentWasteItem) => {
+                // 1. Check if type entry exists in map
+                if (!mTotalsByMonthAndType.has(oCurrentWasteItem.type))
+                    mTotalsByMonthAndType.set(oCurrentWasteItem.type, []) // 2. add it if not
+
+                aTotalsByMonthAndType = mTotalsByMonthAndType.get(oCurrentWasteItem.type)
+                // 3. Check if month exists in array of map entry
+                // 4. Add it if not
+                // 5. Add weight if it does
+                const oDate = new Date(parseInt(oCurrentWasteItem.date));
+                const sMonth = oDate.toLocaleString('default', { month: 'long' });
+                const index = aTotalsByMonthAndType.findIndex((oItem) => oItem.label === sMonth);
+                (index === -1)
+                    ? aTotalsByMonthAndType.push({
+                        label: sMonth,
+                        totalWeight: oCurrentWasteItem.weight / 1000,
+                        dataType: 'month'
+                    })
+                    : aTotalsByMonthAndType[index].totalWeight += oCurrentWasteItem.weight / 1000;
+            }
+
+            aWasteItems.forEach(fnGetTotalsByMonthAndType);
+
+            return mTotalsByMonthAndType;
+        },
+
         calculateTotalTrashKPI: async function (aWasteItems) {
             const iTotal = aWasteItems.reduce(function (result, oWasteItem) {
                 return result.hasOwnProperty("weight") ? result.weight += oWasteItem.weight : result += oWasteItem.weight

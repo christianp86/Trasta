@@ -32,11 +32,15 @@
     "dataDisplayMode": [
         {
             "key": "TYPE",
-            "text": "Per Type"
+            "text": "Per type"
         },
         {
             "key": "MONTH",
-            "text": "Per Month"
+            "text": "Per month"
+        },
+        {
+            "key": "MONTHANDTYPE",
+            "text": "Per month and type"
         }
     ]
 }

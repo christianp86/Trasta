@@ -61,6 +61,7 @@
 						<items>
 							<SegmentedButtonItem icon="sap-icon://bar-chart" tooltip="{i18n>ttpBarChart}" key="bar" />
 							<SegmentedButtonItem icon="sap-icon://donut-chart" tooltip="{i18n>ttpDonutChart}" key="pie" />
+							<SegmentedButtonItem icon="sap-icon://full-stacked-column-chart" tooltip="{i18n>ttpStackedBarChart}" key="stacked" />	
 							<SegmentedButtonItem icon="sap-icon://chart-table-view" tooltip="{i18n>ttpChartTable}" key="chart_table" />
 							<SegmentedButtonItem icon="sap-icon://table-view" tooltip="{i18n>ttpTable}" key="table" />
 						</items>

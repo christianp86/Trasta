@@ -122,13 +122,7 @@ sap.ui.define([
         this.myChart.destroy();
 
       const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
-      let options = this.oChartOptions;
-      if (sChartType !== 'pie') {
-        options = {
-          ...this.options, scales: this.oChartScales
-        };
-      }
-
+      const options = this._getChartOptions(sChartType);
       const chartData = this._createChartDataSets(chartDataAndLabel);
 
       this.myChart = new Chart(ctx, {
@@ -176,7 +170,7 @@ sap.ui.define([
             backgroundColor: this.aBackgroundColor[index],
             borderColor: this.aBorderColor[index],
             borderWidth: 1,
-            data: _getChartData(value)
+            data: this._getChartData(value)
           });
 
           (index === this.aBackgroundColor.length) ? index = 0 : index++;
@@ -185,6 +179,27 @@ sap.ui.define([
       }
 
       return aDataSets;
+    },
+
+    _getChartOptions: function (sChartType) {
+      let options = this.oChartOptions;
+      switch (sChartType) {
+        case "pie":
+          break;
+        case "bar":
+          options = {
+            ...this.options, scales: this.oChartScales
+          };
+          break;
+        case "stacked":
+          options = {
+            ...this.options, scales: this.oStackedBarChart
+          };
+          break;
+        default:
+          break;
+      }
+      return options;
     },
 
     _calculateChartDataByMode: function () {
@@ -262,6 +277,17 @@ sap.ui.define([
           break;
 
         case "pie":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", false);
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+
+          this._drawChart(this.aTotalWasteData);
+          break;
+
+        case "stacked":
           oModel.setProperty("/visibility/chart", true);
           oModel.setProperty("/visibility/table", false);
           oModel.setProperty("/selectedChartType", sSelectedKey);

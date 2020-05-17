@@ -121,8 +121,10 @@ sap.ui.define([
       if (this.myChart !== undefined)
         this.myChart.destroy();
 
-      const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
-      const options = this._getChartOptions(sChartType);
+      const sChartType =
+        (this.getModel("configuration").getProperty("/selectedChartType") === 'stacked') ? 'bar' : this.getModel("configuration").getProperty("/selectedChartType");
+
+      const options = this._getChartOptions(this.getModel("configuration").getProperty("/selectedChartType"));
       const chartData = this._createChartDataSets(chartDataAndLabel);
 
       this.myChart = new Chart(ctx, {
@@ -135,13 +137,22 @@ sap.ui.define([
       });
     },
 
-    _getChartLabels: function (aChartData) {
+    _getChartLabels: function (chartDataAndLabel) {
+      let aChartLabels = [];
       const oBundle = this.getResourceBundle();
+
       const fnMap = (oCurrentItem) => {
         return oCurrentItem.dataType === 'type' ? oBundle.getText(oCurrentItem.label) : oCurrentItem.label;
       };
 
-      return aChartData.map(fnMap);
+      if (Array.isArray(chartDataAndLabel)) {
+        aChartLabels = chartDataAndLabel.map(fnMap);
+      } else {
+        // Map
+        aChartLabels = chartDataAndLabel.values().next().value.map(fnMap)
+      }
+
+      return aChartLabels;
     },
 
     _getChartData: function (aCalculatedChartData) {
@@ -173,8 +184,9 @@ sap.ui.define([
             data: this._getChartData(value)
           });
 
-          (index === this.aBackgroundColor.length) ? index = 0 : index++;
-
+          index++;
+          if (index === this.aBackgroundColor.length)
+            index = 0;
         });
       }
 

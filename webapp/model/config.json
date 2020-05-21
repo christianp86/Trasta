@@ -6,5 +6,6 @@
         "chart" : true,
         "table" : false
     },
-    "selectedChartType": "bar"
+    "selectedChartType": "bar",
+    "selectedDisplayMode": "TYPE"
 }

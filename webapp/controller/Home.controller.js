@@ -29,12 +29,11 @@ sap.ui.define([
   return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
 
     onInit: function () {
-      this.showBusyIndicator();
       this.oCanvas = this.byId("Chart");
+      Wastecalc = new Wastecalc();
 
       EventBus = sap.ui.getCore().getEventBus();
       EventBus.subscribe("WasteItems", "Available", this._initializeChart, this);
-      Wastecalc = new Wastecalc();
 
       localforage.getItem('waste')
         .then((value) => {
@@ -49,9 +48,7 @@ sap.ui.define([
           Log.error(err);
         });
 
-      
-
-      this.aBackgroundColor = new Array([
+      this.aBackgroundColor = new Array(
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
         'rgba(255, 206, 86, 0.2)',
@@ -59,7 +56,17 @@ sap.ui.define([
         'rgba(153, 102, 255, 0.2)',
         'rgba(255, 159, 64, 0.2)',
         'rgba(0, 255, 0, 0.2)'
-      ]);
+      );
+
+      this.aBorderColor = new Array(
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(0, 255, 0, 1)'
+      );
 
       this.oChartOptions = {
         responsive: true,
@@ -72,7 +79,7 @@ sap.ui.define([
             position: 'top',
           }
         }
-      };
+      }
 
       this.oChartScales = {
         yAxes: [{
@@ -80,71 +87,145 @@ sap.ui.define([
             beginAtZero: true
           }
         }]
-      };
+      }
 
-
-
-
+      this.oStackedBarChart = {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true
+        }]
+      }
     },
 
     _initializeChart: function (sChannelId, sEventId, oData) {
-      this._calculateStatisticalValues();
-      this.aTotalWasteData = Wastecalc.calculateTotalWasteValues(this._getWasteItemsFromModel());
+      this._calculateKPIs();
+      this.aTotalWasteData = this._calculateChartDataByMode();
+      this._drawChart(this.aTotalWasteData);
+      this.hideBusyIndicator();
+    },
 
+    onChangeDisplayMode: function (oEvent) {
+      this.aTotalWasteData = this._calculateChartDataByMode();
+      this._drawChart(this.aTotalWasteData);
+    },
+
+    _drawChart: function (chartDataAndLabel) {
       const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
       if (ctx === null) {
         this.hideBusyIndicator();
         return;
       }
 
-      this._drawChart();
-      this.hideBusyIndicator();
-    },
-
-    _drawChart: function () {
-      const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
-      const sChartType = this.getModel("configuration").getProperty("/selectedChartType");
-      let options = this.oChartOptions;
-
       if (this.myChart !== undefined)
         this.myChart.destroy();
 
-      if (sChartType !== 'pie') {
-        options = {
-          ...this.options, scales: this.oChartScales
-        };
-      }
+      const sChartType =
+        (this.getModel("configuration").getProperty("/selectedChartType") === 'stacked') ? 'bar' : this.getModel("configuration").getProperty("/selectedChartType");
+
+      const options = this._getChartOptions(this.getModel("configuration").getProperty("/selectedChartType"));
+      const chartData = this._createChartDataSets(chartDataAndLabel);
 
       this.myChart = new Chart(ctx, {
         type: sChartType,
         data: {
-          labels: this._getChartLabels(),
-          datasets: [{
-            label: this.getResourceBundle().getText('chartLabelTotal'),
-            data: this._getChartData(),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(0, 255, 0, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)',
-              'rgba(0, 255, 0, 1)'
-            ],
-            borderWidth: 1
-          }]
+          labels: this._getChartLabels(chartDataAndLabel),
+          datasets: chartData
         },
         options: options
       });
+    },
+
+    _getChartLabels: function (chartDataAndLabel) {
+      let aChartLabels = [];
+      const oBundle = this.getResourceBundle();
+
+      const fnMap = (oCurrentItem) => {
+        return oCurrentItem.dataType === 'type' ? oBundle.getText(oCurrentItem.label) : oCurrentItem.label;
+      };
+
+      if (Array.isArray(chartDataAndLabel)) {
+        aChartLabels = chartDataAndLabel.map(fnMap);
+      } else {
+        // Map
+        aChartLabels = chartDataAndLabel.values().next().value.map(fnMap)
+      }
+
+      return aChartLabels;
+    },
+
+    _getChartData: function (aCalculatedChartData) {
+      const fnMap = (oTotalItem) => { return oTotalItem.totalWeight };
+
+      return aCalculatedChartData.map(fnMap);
+    },
+
+    _createChartDataSets: function (chartDataAndLabel) {
+      let aDataSets = [];
+      let index = 0;
+
+      if (Array.isArray(chartDataAndLabel)) {
+        aDataSets.push({
+          label: this.getResourceBundle().getText('chartLabelTotal'),
+          data: this._getChartData(chartDataAndLabel),
+          backgroundColor: this.aBackgroundColor,
+          borderColor: this.aBorderColor,
+          borderWidth: 1
+        });
+      } else {
+        // Map
+        chartDataAndLabel.forEach((value, key) => {
+          aDataSets.push({
+            label: this.getResourceBundle().getText(key),
+            backgroundColor: this.aBackgroundColor[index],
+            borderColor: this.aBorderColor[index],
+            borderWidth: 1,
+            data: this._getChartData(value)
+          });
+
+          index++;
+          if (index === this.aBackgroundColor.length)
+            index = 0;
+        });
+      }
+
+      return aDataSets;
+    },
+
+    _getChartOptions: function (sChartType) {
+      let options = this.oChartOptions;
+      switch (sChartType) {
+        case "pie":
+          break;
+        case "bar":
+          options = {
+            ...this.options, scales: this.oChartScales
+          };
+          break;
+        case "stacked":
+          options = {
+            ...this.options, scales: this.oStackedBarChart
+          };
+          break;
+        default:
+          break;
+      }
+      return options;
+    },
+
+    _calculateChartDataByMode: function () {
+      const aAllWasteItems = this._getWasteItemsFromModel();
+      switch (this.getModel("configuration").getProperty("/selectedDisplayMode")) {
+        case "TYPE":
+          return Wastecalc.calculateTotalTrashByCategory(aAllWasteItems);
+        case "MONTH":
+          return Wastecalc.calculateTotalsByMonth(aAllWasteItems);
+        case "MONTHANDTYPE":
+          return Wastecalc.calculateTotalsByMonthAndType(aAllWasteItems);
+        default:
+          return [];
+      }
     },
 
     addWaste: function () {
@@ -175,6 +256,21 @@ sap.ui.define([
       this._updateChartWithNewWaste(oClonedItem);
     },
 
+    _updateChartWithNewWaste: function (oWasteItem) {
+      const isWasteType = (element) => element.label === oWasteItem.label;
+      const index = this.aTotalWasteData.findIndex(isWasteType);
+      let value = this.myChart.data.datasets[0].data[index];
+      value += oWasteItem.weight / 1000;
+
+      this.myChart.data.datasets[0].data[index] = value;
+      this.myChart.update();
+    },
+
+    _calculateKPIs: async function () {
+      const oModel = this.getModel("waste_statistics");
+      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalTrashKPI(this._getWasteItemsFromModel()));
+    },
+
     onSelectionChange: function (oEvent) {
       const sSelectedKey = oEvent.getSource().getProperty("selectedKey");
       const oModel = this.getModel("configuration");
@@ -189,7 +285,7 @@ sap.ui.define([
           if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
             oVerticalLayout.insertContent(this.oCanvas, 1);
 
-          this._drawChart();
+          this._drawChart(this.aTotalWasteData);
           break;
 
         case "pie":
@@ -200,7 +296,18 @@ sap.ui.define([
           if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
             oVerticalLayout.insertContent(this.oCanvas, 1);
 
-          this._drawChart();
+          this._drawChart(this.aTotalWasteData);
+          break;
+
+        case "stacked":
+          oModel.setProperty("/visibility/chart", true);
+          oModel.setProperty("/visibility/table", false);
+          oModel.setProperty("/selectedChartType", sSelectedKey);
+
+          if (oVerticalLayout.indexOfContent(this.oCanvas) === -1)
+            oVerticalLayout.insertContent(this.oCanvas, 1);
+
+          this._drawChart(this.aTotalWasteData);
           break;
 
         case "chart_table":
@@ -208,7 +315,7 @@ sap.ui.define([
           oModel.setProperty("/visibility/table", true);
           if (oVerticalLayout.indexOfContent(this.oCanvas) === -1) {
             oVerticalLayout.insertContent(this.oCanvas, 1);
-            this._drawChart();
+            this._drawChart(this.aTotalWasteData);
           }
           break;
 
@@ -221,6 +328,13 @@ sap.ui.define([
         default:
           break;
       }
+    },
+
+    handleRefresh: function (evt) {
+      setTimeout(function () {
+        this.byId("pullToRefresh").hide();
+        //this._pushNewProduct();
+      }.bind(this), 1000);
     },
 
     handleDelete: function (oEvent) {
@@ -251,51 +365,9 @@ sap.ui.define([
             //MessageToast.show(msg); */
     },
 
-    handleRefresh: function (evt) {
-      setTimeout(function () {
-        this.byId("pullToRefresh").hide();
-        //this._pushNewProduct();
-      }.bind(this), 1000);
-    },
-
-    _getChartLabels: function () {
-      const oModel = this.getModel("waste_types");
-      const oBundle = this.getResourceBundle();
-      const oData = oModel.getProperty("/wasteTypes").sort((a, b) => {
-        return a.key.localeCompare(b.key);
-      });
-
-      const aWasteTypes = oData.map((oWasteType) => {
-        return oBundle.getText(oWasteType.key);
-      });
-
-      return aWasteTypes;
-    },
-
-    _getChartData: function () {
-      if (this.aTotalWasteData === undefined)
-        this.aTotalWasteData = [];
-      return this.aTotalWasteData.map(function (oTotalItem) { return oTotalItem.totalWeight });
-    },
-
-    _updateChartWithNewWaste: function (oWasteItem) {
-      const isWasteType = (element) => element.type === oWasteItem.type;
-      const index = this.aTotalWasteData.findIndex(isWasteType);
-      let value = this.myChart.data.datasets[0].data[index];
-      value += oWasteItem.weight / 1000;
-
-      this.myChart.data.datasets[0].data[index] = value;
-      this.myChart.update();
-    },
-
-    _calculateStatisticalValues: async function () {
-      const oModel = this.getModel("waste_statistics");
-      oModel.setProperty("/totalWaste", Wastecalc.calculateTotalWaste(this._getWasteItemsFromModel()));
-    },
-
     _geti18nValue: function (sKey) {
       return this.geti18nValue(sKey);
-    },
+    }
 
   });
 });

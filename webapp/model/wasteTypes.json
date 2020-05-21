@@ -28,5 +28,19 @@
             "key": "OTHER",
             "text": "Other"
         }
+    ],
+    "dataDisplayMode": [
+        {
+            "key": "TYPE",
+            "text": "Per type"
+        },
+        {
+            "key": "MONTH",
+            "text": "Per month"
+        },
+        {
+            "key": "MONTHANDTYPE",
+            "text": "Per month and type"
+        }
     ]
 }

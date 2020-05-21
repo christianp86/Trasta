@@ -1,6 +1,6 @@
 {
         "name": "trasta",
-        "version": "1.0.2",
+        "version": "1.0.3",
         "description": "Helps you to keep track of your household trash",
         "engines": {
                 "node": "12.x.x"

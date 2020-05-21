@@ -1,11 +1,11 @@
 specVersion: "2.0"
 type: application
 metadata:
-  name: wasteStatsApp
+  name: Trasta
 
 framework:
   name: OpenUI5
-  version: 1.76.0
+  version: 1.78.0
   libraries:
     - name: sap.ui.core
     - name: sap.f

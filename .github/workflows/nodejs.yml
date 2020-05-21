@@ -25,5 +25,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: ui5 build self-contained -a --clean-dest
+    - run: npm run build
     - run: npm run lint && npm run karma

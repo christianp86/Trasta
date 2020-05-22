@@ -4,7 +4,7 @@ sap.ui.require([
 ], function (Opa5, AggregationLengthEquals) {
 	"use strict";
 
-	var sViewName = "com.fidschenberger.wasteStatsApp.view.MainView";
+	var sViewName = "com.fidschenberger.trasta.view.MainView";
 	var sAppId = "idAppControl";
 
 	Opa5.createPageObjects({

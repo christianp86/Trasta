@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (Object, Log) {
     "use strict";
 
-    return Object.extend("com.fidschenberger.wasteStatsApp.libs.wasteStatsCalculator", {
+    return Object.extend("com.fidschenberger.trasta.libs.wasteStatsCalculator", {
 
         calculateTotalTrashByCategory: function (aWasteItems) {
             Log.info("Total waste items:" + aWasteItems.length);

@@ -1,5 +1,5 @@
 sap.ui.define([
-    "com/fidschenberger/wasteStatsApp/libs/waste-stats-calc",
+    "com/fidschenberger/trasta/libs/waste-stats-calc",
     "sap/ui/model/json/JSONModel",
     "sap/ui/qunit/QUnitUtils"
 ], function (Wastecalc, JSONModel, QUnitUtils) {

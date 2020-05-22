@@ -28,5 +28,5 @@ jobs:
         scope: '@sap'
 
     - run: npm ci
-    - run: npm run build
-    - run: npm run lint && npm run karma
+    - run: npm run build-self-contained
+    - run: npm run test

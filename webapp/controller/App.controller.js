@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (Controller, Log) {
 	"use strict";
 
-	return Controller.extend("com.fidschenberger.wasteStatsApp.controller.App", {
+	return Controller.extend("com.fidschenberger.trasta.controller.App", {
 		onInit: function () {
 			this.showBusyIndicator();
 		}

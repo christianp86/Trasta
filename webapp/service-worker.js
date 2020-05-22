@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-my-waste-stats-v0.0.1';
+const CACHE_NAME = 'pwa-trasta-v1.0.3';
 const RESOURCES_TO_PRELOAD = [
   'index.html',
   'register-worker.js',

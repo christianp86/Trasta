@@ -3,12 +3,12 @@ sap.ui.define([
 ], function(Opa5) {
 	"use strict";
 
-	return Opa5.extend("com.fidschenberger.wasteStatsApp.test.integration.arrangements.Startup", {
+	return Opa5.extend("com.fidschenberger.trasta.test.integration.arrangements.Startup", {
 
 		iStartMyApp: function () {
 			this.iStartMyUIComponent({
 				componentConfig: {
-					name: "com.fidschenberger.wasteStatsApp",
+					name: "com.fidschenberger.trasta",
 					async: true,
 					manifest: true
 				}

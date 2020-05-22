@@ -6,7 +6,7 @@ sap.ui.getCore().attachInit(function () {
     "use strict";
 
     sap.ui.require([
-        "com/fidschenberger/wasteStatsApp/test/unit/AllTests"
+        "com/fidschenberger/trasta/test/unit/AllTests"
     ], function () {
         QUnit.start();
     });

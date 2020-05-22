@@ -1,6 +1,6 @@
 sap.ui.define([
 	"sap/ui/test/opaQunit",
-	"com/fidschenberger/wasteStatsApp/test/integration/pages/App"
+	"com/fidschenberger/trasta/test/integration/pages/App"
 ], function (opaTest) {
 	"use strict";
 

@@ -3,7 +3,7 @@
     "platform": "Static webserver",
     "ui5libs": "Content delivery network (OpenUI5)",
     "newdir": false,
-    "projectname": "wasteStatsApp",
+    "projectname": "trasta",
     "namespace": "com.fidschenberger",
     "viewtype": "XML",
     "viewname": "MainView"

@@ -1,11 +1,11 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
-	"com/fidschenberger/wasteStatsApp/model/models"
+	"./model/models"
 ], function(UIComponent, Device, models) {
 	"use strict";
 
-	return UIComponent.extend("com.fidschenberger.wasteStatsApp.Component", {
+	return UIComponent.extend("com.fidschenberger.trasta.Component", {
 
 		metadata: {
 			manifest: "json"
@@ -20,11 +20,11 @@ sap.ui.define([
 			// call the base component's init function
 			UIComponent.prototype.init.apply(this, arguments);
 
-			// enable routing
-			this.getRouter().initialize();
-
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
+
+			// create the views based on the url/hash
+			this.getRouter().initialize();
 		}
 	});
 });

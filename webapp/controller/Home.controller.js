@@ -1,6 +1,6 @@
 sap.ui.loader.config({
   shim: {
-    'com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min': {
+    'com/fidschenberger/trasta/libs/Chart.bundle.min': {
       amd: true,
       exports: 'Chart'
     }
@@ -9,7 +9,7 @@ sap.ui.loader.config({
 
 sap.ui.loader.config({
   shim: {
-    'com/fidschenberger/wasteStatsApp/libs/localforage.min': {
+    'com/fidschenberger/trasta/libs/localforage.min': {
       amd: true,
       exports: 'localForage'
     }
@@ -20,13 +20,13 @@ sap.ui.define([
   "./BaseController",
   "sap/base/Log",
   "sap/ui/core/EventBus",
-  "com/fidschenberger/wasteStatsApp/libs/Chart.bundle.min",
-  "com/fidschenberger/wasteStatsApp/libs/waste-stats-calc",
-  "com/fidschenberger/wasteStatsApp/libs/localforage.min",
+  "com/fidschenberger/trasta/libs/Chart.bundle.min",
+  "com/fidschenberger/trasta/libs/waste-stats-calc",
+  "com/fidschenberger/trasta/libs/localforage.min",
 ], function (Controller, Log, EventBus, Chart, Wastecalc, localForage) {
   "use strict";
 
-  return Controller.extend("com.fidschenberger.wasteStatsApp.controller.Home", {
+  return Controller.extend("com.fidschenberger.trasta.controller.Home", {
 
     onInit: function () {
       this.oCanvas = this.byId("Chart");
@@ -112,7 +112,7 @@ sap.ui.define([
     },
 
     _drawChart: function (chartDataAndLabel) {
-      const ctx = document.getElementById("container-wasteStatsApp---home--Chart");
+      const ctx = document.getElementById("container-trasta---home--Chart");
       if (ctx === null) {
         this.hideBusyIndicator();
         return;

@@ -1,3 +1,4 @@
+// @ts-ignore
 sap.ui.loader.config({
   shim: {
     'com/fidschenberger/trasta/libs/Chart.bundle.min': {
@@ -7,6 +8,7 @@ sap.ui.loader.config({
   }
 });
 
+// @ts-ignore
 sap.ui.loader.config({
   shim: {
     'com/fidschenberger/trasta/libs/localforage.min': {
@@ -35,6 +37,7 @@ sap.ui.define([
       EventBus = sap.ui.getCore().getEventBus();
       EventBus.subscribe("WasteItems", "Available", this._initializeChart, this);
 
+      // @ts-ignore
       localforage.getItem('waste')
         .then((value) => {
           if (value !== null) {

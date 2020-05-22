@@ -28,6 +28,7 @@
                 "localforage": "^1.7.3"
         },
         "devDependencies": {
+                "@types/openui5": "^1.40.5",
                 "@ui5/cli": "^2.2.4",
                 "eslint": "^7.0.0",
                 "karma": "^5.0.9",

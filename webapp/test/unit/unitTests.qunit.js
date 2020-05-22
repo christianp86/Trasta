@@ -8,6 +8,7 @@ sap.ui.getCore().attachInit(function () {
     sap.ui.require([
         "com/fidschenberger/trasta/test/unit/AllTests"
     ], function () {
+        // @ts-ignore
         QUnit.start();
     });
 });

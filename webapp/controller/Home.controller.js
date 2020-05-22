@@ -4,13 +4,7 @@ sap.ui.loader.config({
     'com/fidschenberger/trasta/libs/Chart.bundle.min': {
       amd: true,
       exports: 'Chart'
-    }
-  }
-});
-
-// @ts-ignore
-sap.ui.loader.config({
-  shim: {
+    },
     'com/fidschenberger/trasta/libs/localforage.min': {
       amd: true,
       exports: 'localForage'

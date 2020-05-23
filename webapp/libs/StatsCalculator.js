@@ -97,7 +97,7 @@ function calculateTotalsByMonthAndType(wasteItems) {
 /**
  * @async
  * @param {Array} wasteItems 
- * @returns {Number} - Total trash weight
+ * @returns {Promise} - Total trash weight
  */
 async function calculateTotalTrashKPI(wasteItems) {
     const total = wasteItems.reduce((result, oWasteItem) => {
@@ -108,4 +108,7 @@ async function calculateTotalTrashKPI(wasteItems) {
     return total;
 }
 
-export { calculateTotalTrashKPI, calculateTotalsByMonth, calculateTotalsByMonthAndType, calculateTotalsByType }
+exports.calculateTotalsByType = calculateTotalsByType;
+exports.calculateTotalsByMonth = calculateTotalsByMonth;
+exports.calculateTotalsByMonthAndType = calculateTotalsByMonthAndType;
+exports.calculateTotalTrashKPI = calculateTotalTrashKPI;

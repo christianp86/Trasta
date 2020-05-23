@@ -184,6 +184,196 @@
             "type": "DIAPERS",
             "weight": 2500,
             "date": "1585408980000"
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 1740,
+            "date": 1585727160000
+        },
+        {
+            "type": "PAPER",
+            "weight": 1000,
+            "date": 1585999560000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 1590,
+            "date": 1585999560000
+        },
+        {
+            "type": "PLASTIC",
+            "weight": 710,
+            "date": 1586280960000
+        },
+        {
+            "type": "ALUMINUM",
+            "weight": 780,
+            "date": 1586280960000
+        },
+        {
+            "type": "GLASS",
+            "weight": 6020,
+            "date": 1586280960000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 1560,
+            "date": 1586531400000
+        },
+        {
+            "type": "OTHER",
+            "weight": 590,
+            "date": 1586531400000
+        },
+        {
+            "type": "PAPER",
+            "weight": 870,
+            "date": 1586531400000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2080,
+            "date": 1586531400000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 1210,
+            "date": 1586887800000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2330,
+            "date": 1586887800000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 2520,
+            "date": 1587227100000
+        },
+        {
+            "type": "PAPER",
+            "weight": 1040,
+            "date": 1587227100000
+        },
+        {
+            "type": "PLASTIC",
+            "weight": 710,
+            "date": 1587227100000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2090,
+            "date": 1587227100000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 1820,
+            "date": 1587649260000
+        },
+        {
+            "type": "OTHER",
+            "weight": 370,
+            "date": 1587649260000
+        },
+        {
+            "type": "PAPER",
+            "weight": 1300,
+            "date": 1587649260000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2490,
+            "date": 1587649260000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 1790,
+            "date": 1588001040000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2160,
+            "date": 1588001040000
+        },
+        {
+            "type": "PAPER",
+            "weight": 1630,
+            "date": 1588322820000
+        },
+        {
+            "type": "PLASTIC",
+            "weight": 860,
+            "date": 1588609260000
+        },
+        {
+            "type": "ALUMINUM",
+            "weight": 480,
+            "date": 1588609260000
+        },
+        {
+            "type": "GLASS",
+            "weight": 8540,
+            "date": 1588609260000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2950,
+            "date": 1588609260000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 1220,
+            "date": 1589051760000
+        },
+        {
+            "type": "OTHER",
+            "weight": 930,
+            "date": 1589051760000
+        },
+        {
+            "type": "PAPER",
+            "weight": 2380,
+            "date": 1589051760000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 3340,
+            "date": 1589051760000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 930,
+            "date": 1589311620000
+        },
+        {
+            "type": "OTHER",
+            "weight": 230,
+            "date": 1589352960000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 1940,
+            "date": 1589352960000
+        },
+        {
+            "type": "ORGANIC",
+            "weight": 1360,
+            "date": 1590147660000
+        },
+        {
+            "type": "PAPER",
+            "weight": 2610,
+            "date": 1590147660000
+        },
+        {
+            "type": "PLASTIC",
+            "weight": 1270,
+            "date": 1590147660000
+        },
+        {
+            "type": "DIAPERS",
+            "weight": 2410,
+            "date": 1590147660000
         }
     ]
 }

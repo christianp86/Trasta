@@ -29,4 +29,5 @@ jobs:
 
     - run: npm ci
     - run: npm run build-self-contained
+    - run: npm run openUI5-Test
     - run: npm run test

@@ -8,6 +8,10 @@ sap.ui.loader.config({
     'com/fidschenberger/trasta/libs/localforage.min': {
       amd: true,
       exports: 'localForage'
+    },
+    'com/fidschenberger/trasta/libs/StatsCalculator': {
+      amd: true,
+      exports: 'StatsCalculator'
     }
   }
 });
@@ -17,9 +21,10 @@ sap.ui.define([
   "sap/base/Log",
   "sap/ui/core/EventBus",
   "com/fidschenberger/trasta/libs/Chart.bundle.min",
-  "com/fidschenberger/trasta/libs/waste-stats-calc",
   "com/fidschenberger/trasta/libs/localforage.min",
-], function (Controller, Log, EventBus, Chart, Wastecalc, localForage) {
+  "com/fidschenberger/trasta/libs/waste-stats-calc",
+  "com/fidschenberger/trasta/libs/StatsCalculator",
+], function (Controller, Log, EventBus, Chart, localForage, Wastecalc, StatsCalculator) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.trasta.controller.Home", {
@@ -266,6 +271,7 @@ sap.ui.define([
     _calculateKPIs: async function () {
       const oModel = this.getModel("waste_statistics");
       oModel.setProperty("/totalWaste", Wastecalc.calculateTotalTrashKPI(this._getWasteItemsFromModel()));
+      const test = StatsCalculator.calculateTotalTrashKPI(this._getWasteItemsFromModel());
     },
 
     onSelectionChange: function (oEvent) {

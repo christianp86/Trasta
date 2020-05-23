@@ -271,7 +271,6 @@ sap.ui.define([
     _calculateKPIs: async function () {
       const oModel = this.getModel("waste_statistics");
       oModel.setProperty("/totalWaste", Wastecalc.calculateTotalTrashKPI(this._getWasteItemsFromModel()));
-      const test = StatsCalculator.calculateTotalTrashKPI(this._getWasteItemsFromModel());
     },
 
     onSelectionChange: function (oEvent) {

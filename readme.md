@@ -20,6 +20,16 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 * [chart.js](https://github.com/chartjs/Chart.js) - HTML5 charts
 * [localForage](https://github.com/localForage/localForage) - Enables offline storage
 
+## Calculating the CO2 footprint
+# Sources
+* [StatistischesMonatsheft BW 06/2010](https://www.statistik-bw.de/Service/Veroeff/Monatshefte/PDF/Beitrag10_06_01.pdf)
+
+# Factors
+| Trash type                                          | Aluminum | Diapers | Glass   | Organic | Other   | Paper   | Plastic |
+|-----------------------------------------------------|----------|---------|---------|---------|---------|---------|---------|
+|  CO2 Footprint waste managemet (in kg per kg trash) | unknown  | unknown | 2.15    | unknown | unknown | 1,42    | 2,89    |
+|  CO2 Footprint production (in kg)                   | unknown  | unknown | unknown | unknown | unknown | unknown | unknown |
+
 
 ## Contributing
 Pull requests are always welcome. I will setup a project etc. as well so that people can post their ideas.

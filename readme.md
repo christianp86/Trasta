@@ -1,7 +1,7 @@
 # Trasta (Trash statistics)
 A progressive web app which helps you to track your household trash.
 
-![Node.js CI](https://github.com/christianp86/Trasta/workflows/Node.js%20CI/badge.svg)
+![CI](https://github.com/christianp86/Trasta/workflows/CI/badge.svg?branch=master)
 
 ## Features
 * PWA enabled, no sync to any cloud service, local data only!

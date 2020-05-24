@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "com.fidschenberger.wasteStatsApp",
+		"id": "com.fidschenberger.trasta",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"applicationVersion": {
@@ -28,7 +28,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "com.fidschenberger.wasteStatsApp.view.App",
+			"viewName": "com.fidschenberger.trasta.view.App",
 			"type": "XML",
 			"async": true,
 			"id": "app"
@@ -50,7 +50,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "com.fidschenberger.wasteStatsApp.i18n.i18n"
+					"bundleName": "com.fidschenberger.trasta.i18n.i18n"
 				}
 			},
 			"waste_types": {
@@ -84,7 +84,7 @@
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"viewPath": "com.fidschenberger.wasteStatsApp.view",
+				"viewPath": "com.fidschenberger.trasta.view",
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"async": true

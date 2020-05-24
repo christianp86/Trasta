@@ -7,7 +7,7 @@ sap.ui.define([
 ], function (Controller, Log, EventBus, BusyIndicator, UIComponent) {
     "use strict";
 
-    return Controller.extend("com.fidschenberger.wasteStatsApp.controller.BaseController", {
+    return Controller.extend("com.fidschenberger.trasta.controller.BaseController", {
 		/**
 		 * Convenience method for accessing the router.
 		 * @public

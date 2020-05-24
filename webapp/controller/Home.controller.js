@@ -8,10 +8,6 @@ sap.ui.loader.config({
     'com/fidschenberger/trasta/libs/localforage.min': {
       amd: true,
       exports: 'localForage'
-    },
-    'com/fidschenberger/trasta/libs/StatsCalculator': {
-      amd: true,
-      exports: 'StatsCalculator'
     }
   }
 });
@@ -22,9 +18,8 @@ sap.ui.define([
   "sap/ui/core/EventBus",
   "com/fidschenberger/trasta/libs/Chart.bundle.min",
   "com/fidschenberger/trasta/libs/localforage.min",
-  "com/fidschenberger/trasta/libs/waste-stats-calc",
-  "com/fidschenberger/trasta/libs/StatsCalculator",
-], function (Controller, Log, EventBus, Chart, localForage, Wastecalc, StatsCalculator) {
+  "com/fidschenberger/trasta/libs/waste-stats-calc"
+], function (Controller, Log, EventBus, Chart, localForage, Wastecalc) {
   "use strict";
 
   return Controller.extend("com.fidschenberger.trasta.controller.Home", {

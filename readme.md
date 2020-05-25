@@ -2,7 +2,7 @@
 A progressive web app which helps you to track your household trash.
 
 ![CI](https://github.com/christianp86/Trasta/workflows/CI/badge.svg?branch=master)
-https://img.shields.io/github/package-json/v/christianp86/Trasta
+![GitHub package.json version](https://img.shields.io/github/package-json/v/christianp86/Trasta)
 
 ## Features
 * PWA enabled, no sync to any cloud service, local data only!
